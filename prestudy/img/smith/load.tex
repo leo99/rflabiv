@@ -1,0 +1,167 @@
+\documentclass[a4paper, 12pt, notitlepage]{article}
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{hyperref}
+\usepackage[numbers, sort&compress]{natbib}
+\usepackage{calc}
+\usepackage{fancyhdr}
+\usepackage{graphics}
+\usepackage{nowidow}
+\usepackage{color}
+\usepackage{subcaption}
+\usepackage{enumitem}
+\usepackage{epsfig}
+\usepackage{epstopdf}
+\usepackage{verbatim}
+\usepackage{listings}
+\usepackage{picture, xcolor}
+
+% Matlab colors
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+ 
+% Listings settings
+\lstset{ %
+  language=Matlab,                % the language of the code
+  basicstyle=\footnotesize\ttfamily, % the size of the fonts that are used for the code
+  numbers=left,                   % where to put the line-numbers
+  numberstyle=\scriptsize\ttfamily\color{gray},  % the style that is used for the line-numbers
+  stepnumber=1,                   % the step between two line-numbers. If it's 1, each line 
+                                  % will be numbered
+  numbersep=10pt,                 % how far the line-numbers are from the code
+  showspaces=false,               % show spaces adding particular underscores
+  showstringspaces=false,         % underline spaces within strings
+  showtabs=false,                 % show tabs within strings adding particular underscores
+  tabsize=4,                      % sets default tabsize to 2 spaces
+  breaklines=true,                % sets automatic line breaking
+  breakatwhitespace=true,         % sets if automatic breaks should only happen at whitespace
+  keywordstyle=\color{blue},      % keyword style
+  commentstyle=\color{dkgreen},   % comment style
+  stringstyle=\color{mauve},      % string literal style
+  escapeinside={\%*}{*)},         % if you want to add a comment within your code
+  morekeywords={*,...}            % if you want to add more keywords to the set
+}
+
+
+\newlength{\oneLine}
+\setlength{\oneLine}{12pt}
+
+\newlength{\eqMargin}
+\newlength{\eqHorizMargin}
+\newlength{\eqVertMargin}
+
+\setlength{\eqMargin}{20mm}
+\setlength{\eqHorizMargin}{\eqMargin}
+\setlength{\eqVertMargin}{\eqMargin}
+
+% Paper
+\setlength{\paperwidth}{210mm}
+\setlength{\paperheight}{297mm}
+
+% Rid the extra space
+\setlength{\hoffset}{-1in}
+\setlength{\voffset}{-1in}
+\addtolength{\hoffset}{\eqHorizMargin}
+\addtolength{\voffset}{\eqVertMargin}
+
+% Set margin from the page border (horizontal)
+\setlength{\oddsidemargin}{0pt}
+\setlength{\evensidemargin}{0pt}
+
+% Header
+\setlength{\topmargin}{0pt}
+\setlength{\headheight}{42pt}
+\setlength{\headsep}{18pt}
+\renewcommand{\headrulewidth}{0pt}
+
+% Footer
+\addtolength{\footskip}{18pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Margin notes
+\setlength{\marginparsep}{0pt}
+\setlength{\marginparwidth}{0pt}
+
+% Text
+\setlength{\textwidth}{\paperwidth - \hoffset - \hoffset - 25.4mm - 25.4mm}
+\setlength{\textheight}{\paperheight - \voffset - \topmargin - \headheight - \headsep - \footskip - \voffset - 25.4mm - 25.4mm}
+
+%\setlength{\labelwidth}{20mm}
+
+% Hyperref settings
+\hypersetup{
+    unicode=true,					% non-Latin characters in Acrobat's bookmarks
+    pdftoolbar=true,				% show Acrobat's toolbar?
+    pdfmenubar=true,				% show Acrobat's menu?
+    pdffitwindow=false,				% window fit to page when opened
+    pdfstartview={FitH},			% fits the width of the page to the window
+    pdftitle={S-26.3120 Radio Engineering, laboratory course},	% title
+    pdfauthor={Tuomas Leinonen},	% author
+    pdfsubject={Radio Engineering},	% subject of the document
+    pdfcreator={LaTeX},				% creator of the document
+    pdfproducer={Aalto},			% producer of the document
+    pdfkeywords={radio} {amplifier} {measurement},	% list of keywords
+    pdfnewwindow=true,				% links in new window
+    colorlinks=true,				% false: boxed links; true: colored links
+    linkcolor=black,				% color of internal links
+    citecolor=black,				% color of links to bibliography
+    filecolor=black,				% color of file links
+    urlcolor=black					% color of external links
+}
+
+% Bad hyphenation
+%\hyphenation{}
+
+% Macros
+\newcommand{\dB}{\mathrm{\;dB}}
+\newcommand{\dBm}{\mathrm{\;dBm}}
+\newcommand{\m}[1]{\mathrm{#1}}
+
+\newcommand\varpm{\mathbin{\vcenter{\hbox{%
+  \oalign{\hfil$\scriptstyle+$\hfil\cr
+          \noalign{\kern-.3ex}
+          $\scriptscriptstyle({-})$\cr}%
+}}}}
+\newcommand\varmp{\mathbin{\vcenter{\hbox{%
+  \oalign{$\scriptstyle({+})$\cr
+          \noalign{\kern-.3ex}
+          \hfil$\scriptscriptstyle-$\hfil\cr}%
+}}}}
+
+\definecolor{dkred}{rgb}{0.6, 0, 0}
+\definecolor{dkgrn}{rgb}{0, 0.6, 0}
+\definecolor{dkblue}{rgb}{0, 0, 0.6}
+\definecolor{gray}{rgb}{0.8, 0.8, 0.8}
+
+
+\begin{document}
+
+\pagestyle{empty}
+
+\begin{figure}[!h]
+\begin{center}
+	\epsfig{file=outSmith.eps, width=\textwidth}
+	\setlength{\unitlength}{1mm}
+		\setlength{\fboxsep}{1mm}
+	\begin{picture}(1,1)
+		\linethickness{0.5mm}
+		{\color{dkgrn}
+		\put(38, 120){\fcolorbox{dkgrn}{white}{$\rho_\mathrm{L} = 0.492 \,\angle {+20.4 {\,}^\circ}$}}
+		\put(38, 88){\fcolorbox{dkgrn}{white}{$\rho_\mathrm{L}^* = 0.492 \,\angle {-20.4 {\,}^\circ}$}}
+		}{\color{blue}
+		\put(-5, 165){\fcolorbox{blue}{white}{$y_\mathrm{stub} = +\mathrm{j} 1.13$}}
+		\put(-43, 150){\fcolorbox{blue}{white}{$l = 0.135\;\lambda$}}
+		\put(-65, 95){\fcolorbox{blue}{white}{$y_\mathrm{open} = 0$}}
+		}{\color{red}
+		\put(-65, 109){\fcolorbox{red}{white}{$y_\mathrm{L}^* = 0.35 + \mathrm{j} 0.16$}}
+		\put(15, 140){\fcolorbox{red}{white}{$d = 0.306\;\lambda$}}
+		\put(10, 60){\fcolorbox{red}{white}{$y_\mathrm{L}^* \,\!' = 1 - \mathrm{j} 1.13$}}
+		}
+	\end{picture}
+\end{center}
+\end{figure}
+
+\end{document}

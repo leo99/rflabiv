@@ -1,0 +1,1201 @@
+%!PS-Adobe-2.0 EPSF-2.0
+%%Creator: Guess Who
+%%Title: Luis: Smith chart
+%%CreationDate: idag
+%%DocumentFonts: Times-Roman
+%%DocumentNeededFonts: Times-Roman
+%%Pages: 1
+%%PagesOrder: Ascend
+%%BoundingBox: 18 62 595 700
+%%EndComments
+%!
+% smith.ps:  %%BoundingBox: 18 52 595 760
+%
+% The following PostScript(R) program produces a Smith chart which is
+% functionally equivalent to the ubiquitous Smith chart created by
+% Phillip Smith and marketed by the Kay Electric Company [#82-BSPR (9-66)]
+% and others.  It is reproduced here without permission & is intended for
+% use by cheap students; any plagiarizer incorporating this code into
+% marketed products is welcome to risk his/her own legal neck, but please
+% leave me out of it.  Questions, corrections, & such may be sent to
+% mjj@stda.jhuapl.edu.
+%
+% The file "smith.ps" is a first-cut attempt at recreating within PostScript
+% the chart invented by Phillip Smith of RCA which is of inestimable utility
+% to RF engineers.  The most significant object on the chart is the reflection
+% coefficient chart in the chart's center.  This chart relates complex
+% impedances (or admittances) to their resultant reflection coefficient.
+% See just about any introductory microwave text for further information.
+% 
+% I reproduced the nomographs along the bottom as best as I could from the
+% 1966 original (Kay Electric Company #82-BSPR (9-66)), but I deleted some
+% numerical labels to accommodate the font used; this shouldn't affect their
+% use.
+% 
+% I confess I failed in my primary aim with this chart, namely to generate
+% a combined impedance-admittance chart with different colors on a color
+% PostScript printer.  Unfortunately, I was unable to get access to one,
+% so I gave up.  Nevertheless, I do have a procedure "DoGB" which will
+% generate the admittance circles using dashed lines and a sparser grid.
+% If it is used it should be executed prior to the execution of "DoRX"
+% so that the impedance circles are drawn on top.
+% 
+% I have tried to be fairly straightforward with the coding so that others
+% could modify it without much grief.  The brave souls who wouldst hack
+% this code might find lots of places where the code could be optimized
+% for speed; I encourage them.  There are probably way more call to "sin"
+% or "atan" than are necessary, making the whole chart take about 60 seconds
+% to print out on a LaserWriter II NTX.  Your mileage may vary.
+% 
+% The casual observer will notice that smith.ps does NOT adhere to
+% Encapsulated PostScript Format (EPSF).  This is probably a bummer
+% if you wanted to use this in a document.  Anybody knowing how to
+% put it in EPS format, be my guest.
+% 
+% The procedure "Dotitles" lets you personalize the chart.  If you want to
+% make a whole bunch of blank charts you can replace my supplied text with
+% nothings or with underlines.  The procedure "Dodots" is a half-hearted
+% try at plotting points on the chart; it accepts an array of complex
+% impedances and labels, and a normalizing resistance.  I gave the
+% Bezier fitter in PostScript a try, but it didn't work so I ripped the
+% code out.  Any takers?
+% 
+% Anyway, it was a interesting exercise, and I think I understand the
+% chart a whole bunch more.  Even if you're a total CAE proselyte, when
+% you print it out and look at it, you'll still get a rush of
+% appreciation for the chart's mathematical beauty and engineering
+% utility.
+% 
+% 18 December 1990
+% Marshall Jose
+% JHU - Applied Physics Laboratory, Laurel, MD
+%
+%
+% N.B.:  In the syntax comments below, the top of the stack is designated
+%        by the object "closest" to the procedure-name.  In the following
+%        example, "var1" is on the top of stack upon entry and "res1" is on
+%        the top upon exit:
+%
+%            var2 var1  Procname  res1 res2
+%
+%        
+
+
+% Line thickness definitions LC 19.3.2001
+/smcthickline {0.7} def
+/smcthinline {0.2} def
+/ruleline {0.2} def
+% These are for plotting on the chart
+/thickline {1.2} def
+/thinline {0.8} def
+
+% Modifications have been made
+%
+%  r x RXtoUV v u   changed to    [r x] RXtoUV v u
+%
+% New functions have been added
+%
+%  u v UVtoRX r x   converts smith-point to real-imaginary number
+%
+%
+% 15 April 1996
+% Vesa Starck
+% Circuit Theory Laboratory - Helsinki University of Technology
+% Espoo, Finland
+
+% The location of the chart on the page can be adjusted here:
+%4.25 72 mul 5.9 72 mul translate
+%4.13 72 mul 5.9 72 mul translate
+4.26 72 mul 5.6 72 mul translate  % for smithmagic.tex positioning. LC
+
+/Helvfont {/Palatino-Roman findfont 5 scalefont setfont} def Helvfont
+/Symfont {/Symbol findfont 5 scalefont setfont} def
+/Helvbigfont {/Palatino-Roman findfont 6 scalefont setfont} def
+/Symbigfont {/Symbol findfont 6 scalefont setfont} def
+
+%*
+%*   "Labels" are the numbers which index the R & X circles; "Lvalues"
+%*   are the actual label values; "Regions", "Minordiv", and
+%*   "Majordiv" define the boundaries and divisions of the various
+%*   regions within with the same grid density is kept.
+%*
+[(0) (0.1) (0.2) (0.3) (0.4) (0.5) (0.6) (0.7) (0.8) (0.9)
+ (1.0) (1.2) (1.4) (1.6) (1.8) (2.0) (3.0) (4.0) (5.0)
+ (10) (20) (50)] /Labels exch def
+[0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0 1.2 1.4
+ 1.6 1.8 2.0 3.0 4.0 5.0 10 20 50] /Lvalues exch def
+[ 0  0.2   0.5   1     2     5    10    20    50 ] /ZRegions exch def
+   [ 0.01  0.02  0.05  0.1   0.2   1     2    10 ] /ZMinordiv exch def
+   [ 5     5     2     2     5     5     5    5  ] /ZMajordiv exch def
+[ 0  1     2     4    10    20    50 ] /YRegions exch def
+   [ 0.1  0.2  0.5     1     5    30 ] /YMinordiv exch def
+   [ 5     5     2     6     2     1 ] /YMajordiv exch def
+/minorinc 0 def
+/majorinc 0 def
+
+/Unitradius 3.25 72 mul def	% Radius of rho=1 circle
+				% (also used for general scaling)
+/Coeffradius 3.3 72 mul def	% Radius of angle circle (was: 3.375) % VS
+/Waveradius  3.625 72 mul def	% Radius of wavelength circle
+
+%*****  [r x] RXtoUV v u
+%*
+%*   Converts Z space (r + jx) to gamma space (u + jv)
+%*
+/RXtoUV {
+  aload pop /xtmp exch def /rtmp exch def
+  rtmp rtmp mul xtmp xtmp mul add rtmp 2 mul add 1 add /dtmp exch def
+  rtmp rtmp mul xtmp xtmp mul add 1 sub dtmp div
+  xtmp 2 mul dtmp div
+} def
+
+%*****  u v UVtoRX [r x]
+%*
+%*   Converts gamma space (u + jv) to Z space (r + jx)
+%*
+/UVtoRX {
+  /vtmp exch def   /utmp exch def
+  utmp utmp mul vtmp vtmp mul add utmp 2 mul sub 1 add /dtmp exch def
+  1 utmp utmp mul sub vtmp vtmp mul sub dtmp div
+  vtmp 2 mul dtmp div 2 array astore
+} def
+
+%*****  r x  AngR  thetaR
+%*
+%*   Finds the angle of the line from the center of the R=r circle to (r + jx)
+%*
+/AngR {
+  /xa exch def   /ra exch def
+  [ra xa] RXtoUV
+  exch ra ra 1 add div sub atan
+} def
+
+%***** r x  AngX  thetaX
+%*
+%*   Finds the angle of the line from the center of the X=x circle to (r + jx)
+%*
+/AngX {
+  /xa exch def   /ra exch def
+  [ra xa] RXtoUV
+  1 xa div sub exch 1 sub atan
+} def
+
+%***** u v radius ang1 ang2  Doarc  -
+%*
+%*   Guess.
+%*
+/Doarc {
+  5 -1 roll Unitradius mul
+  5 -1 roll Unitradius mul
+  5 -1 roll Unitradius mul
+  5 -2 roll
+  arc stroke
+} def
+
+%***** r x1 x2  DrawRarc  -
+%*
+%*   Right again.
+%*
+/DrawRarc {
+  /xx2 exch def  /xx1 exch def  /rr exch def
+
+  rr dup 1 add div /u0 exch def
+  /v0 0 def
+  1 rr 1 add div /radius exch def
+
+  rr xx1 AngR /theta1 exch def
+  rr xx2 AngR /theta2 exch def
+  u0 v0 radius theta1 theta2 Doarc
+} def
+
+%***** x r1 r2  DrawXarc  -
+%*
+%*   Hey!  3 for 3!
+%*
+/DrawXarc {
+  /rr2 exch def  /rr1 exch def  /xx exch def
+
+  /u0 1 def
+  1 xx div /v0 exch def
+  1 xx div abs /radius exch def
+
+  rr1 xx AngX /theta1 exch def
+  rr2 xx AngX /theta2 exch def
+  u0 v0 radius theta1 theta2 Doarc
+} def
+
+%*****  Doblock
+%*
+%*   Draws a grid block bounded by (r1 + jx1) and (r2 + jx2)
+%*
+/Doblock {
+  /rtics 0 def
+  r1 minorinc add minorinc r2 minorinc 2 div add {
+    /r exch def
+    rtics 1 add dup /rtics exch def
+    majorinc mod 0 eq {smcthickline setlinewidth} {smcthinline setlinewidth} ifelse
+    r x2 x1 DrawRarc
+    r x1 neg x2 neg DrawRarc
+  } for
+
+  /xtics 0 def
+  x1 minorinc add minorinc x2 minorinc 2 div add {
+    /x exch def
+    xtics 1 add dup /xtics exch def
+    majorinc mod 0 eq {smcthickline setlinewidth} {smcthinline setlinewidth} ifelse
+    x r1 r2 DrawXarc
+    x neg r2 r1 DrawXarc
+  } for
+} def
+
+%***** regions minordiv majordiv  Doimmittance  -
+%*
+%*   Draws the R & X (or G & B) circles
+%*
+/Doimmittance {
+  /Majordiv exch def  /Minordiv exch def  /Regions exch def
+  0 1 Minordiv length 1 sub {/index exch def
+
+    Minordiv index get /minorinc exch def
+    Majordiv index get /majorinc exch def
+
+    0 /r1 exch def				% wings
+    Regions index 1 add get /r2 exch def
+    Regions index get /x1 exch def
+    Regions index 1 add get /x2 exch def
+    Doblock
+
+    Regions index get /r1 exch def		% trunk
+    Regions index 1 add get /r2 exch def
+    0 /x1 exch def
+    Regions index get /x2 exch def
+    index 7 eq {majorinc 3 def} if	% yukky hack
+    Doblock
+  } for
+
+  smcthickline setlinewidth
+  Unitradius neg 0 moveto Unitradius 0 lineto stroke
+  0 0 Unitradius 0 360 arc stroke
+  50 10000 0  DrawRarc
+  50 0 -10000 DrawRarc
+  50 0 10000  DrawXarc
+  -50 10000 0 DrawXarc
+  newpath 0 0 2 0 360 arc
+  currentgray 1 setgray fill setgray ruleline setlinewidth % VS was:0 setlinew
+  0 0 2 0 360 arc stroke
+  0 0 0.25 0 360 arc stroke
+
+} def
+
+%***** x y label  Dorightstring  -
+%*
+%*  Right-justifies "label" and writes it on a white background
+%*
+/Dorightstring {
+  /lab exch def  /yl exch def  /xl exch def
+  lab stringwidth pop /wid exch def
+  newpath  xl yl moveto
+	   wid neg 0 rlineto
+           0 5 rlineto
+           wid 0 rlineto
+           0 -5 rlineto
+  closepath currentgray 1 setgray fill
+  xl yl moveto wid neg 1 rmoveto setgray lab show
+} def
+
+%*****  x y label  Doleftstring  -
+%*
+%*   Left-justifies "label" and writes it on a white background
+%*
+/Doleftstring {
+  /lab exch def  /yl exch def  /xl exch def
+  lab stringwidth pop /wid exch def
+  newpath  xl yl moveto
+           wid 0 rlineto
+           0 5 rlineto
+           wid neg 0 rlineto
+           0 -5 rlineto
+  closepath currentgray 1 setgray fill
+  xl yl 1 add moveto setgray lab show
+} def
+
+%***** -  DoLabels  -
+%*
+%*   Writes all the numbers within the R-X area
+%*
+/DoLabels {
+  1 1 Lvalues length 1 sub { dup
+    Labels exch get /label exch def
+    Lvalues exch get /x exch def
+    [0 x] RXtoUV exch atan
+    gsave rotate Unitradius 1 sub 1 label Dorightstring grestore
+    [0 x neg] RXtoUV exch atan 180 add
+    gsave rotate Unitradius 1 sub neg 1 label Doleftstring grestore
+    [x 0] RXtoUV pop Unitradius mul neg
+    gsave 90 rotate 1 add 2 exch label Doleftstring grestore
+  } for
+
+  2 2 10 { dup
+    Labels exch get /label exch def
+    Lvalues exch get /x exch def
+    [x 1] RXtoUV Unitradius mul exch Unitradius mul exch
+    gsave translate x 1 AngX 180 add rotate
+          1 1 label Doleftstring grestore
+    [x -1] RXtoUV Unitradius mul exch Unitradius mul exch
+    gsave translate x -1 AngX rotate
+          -1 1 label Dorightstring grestore
+    [1 x] RXtoUV Unitradius mul exch Unitradius mul exch
+    gsave translate 1 x AngR rotate
+          -1 1 label Dorightstring grestore
+    [1 x neg] RXtoUV Unitradius mul exch Unitradius mul exch
+    gsave translate 1 x neg AngR 180 add rotate
+          1 1 label Doleftstring grestore
+  } for
+
+} def
+
+%*
+%*   Draws the R & X (impedance) circles
+%*
+/DoRX {
+  ZRegions ZMinordiv ZMajordiv Doimmittance DoLabels
+} def
+
+%*
+%*   Draws the G & B (admittance) circles in gray
+%*
+/DoGB {
+  gsave
+    currentdash [1 1] 0 setdash
+    180 rotate
+    YRegions YMinordiv YMajordiv Doimmittance DoLabels
+    setdash
+  grestore
+} def
+
+%*****  string radius radial  Doperp  -
+%*
+%*   Writes "string" centered at the point which is "radial" units, along
+%*   the angle "radial", from the center.
+%*
+/Doperp {
+  gsave rotate 0 translate -90 rotate
+  dup stringwidth pop 2 div neg 0 moveto show grestore
+} def
+/Doperpopaque {
+  gsave rotate 0 translate -90 rotate
+  dup stringwidth pop 2 div neg 0 moveto
+  dup currentpoint 2 copy newpath moveto 0 -1 rmoveto
+  3 -1 roll stringwidth pop dup 0 rlineto 0 7 rlineto neg 0 rlineto closepath
+  currentgray 1 setgray fill setgray moveto
+  show grestore
+} def
+
+%*****  angle  FindTCrad  radius
+%*
+%*   A messy hack which finds the distance from the (-1,0) to the
+%*   coefficient angle circle.
+%*
+/FindTCrad {/th exch def
+  th sin Unitradius mul Coeffradius div
+  dup dup mul neg 1 add sqrt div 1 atan
+  180 th sub exch sub sin Coeffradius mul th sin div
+} def
+
+%*****  Docoeffcircle
+%*
+%*   Draws and labels the coefficient angle circle.
+%*
+/Docoeffcircle {
+  ruleline setlinewidth 0 setgray
+  0 0 Coeffradius 0 360 arc stroke
+  gsave
+  0 2 178 { pop
+    Coeffradius neg 0 moveto -2 0 rlineto stroke
+    Coeffradius 0 moveto 2 0 rlineto stroke
+    2 rotate
+  } for
+  grestore
+  /str 20 string def
+  Helvbigfont
+  20 10 170 { dup dup
+    str cvs exch Coeffradius 4 add exch Doperp
+    neg dup str cvs exch Coeffradius 3 add exch Doperp
+  } for
+  (180) Coeffradius 3 add 180 Doperp
+  Symfont (\261) Coeffradius 3 add 181.5 Doperp Helvfont
+
+  smcthickline setlinewidth 0 0 Coeffradius Waveradius add 2 div 0 360 arc stroke
+  ruleline setlinewidth Coeffradius 3 sub 0 moveto 3 0 rlineto stroke
+} def
+
+%***** Dowavecircle
+%*
+%*   Draws and labels the wavelength circle.
+%*
+/Dowavecircle {
+  /str 20 string def
+  ruleline setlinewidth 0 setgray
+  0 0 Waveradius 0 360 arc stroke
+  /lstep 180 125 div def
+  Helvbigfont
+  1 1 250 {/ix exch def
+    gsave ix lstep mul rotate
+    Waveradius 2 add neg 0 moveto 4 0 rlineto stroke grestore
+    ix 5 mod 0 eq ix 16 gt and {
+      ix 250 eq {0} {ix} ifelse
+      500 div str cvs dup
+      gsave ix lstep mul rotate Waveradius 7 sub neg 0 translate 90 rotate
+      dup stringwidth pop 2 div neg 0 moveto show grestore
+      gsave ix lstep mul neg rotate Waveradius 3 add neg 0 translate 90 rotate
+      dup stringwidth pop 2 div neg 0 moveto show grestore
+    } if
+  } for
+  Helvfont
+  smcthickline setlinewidth
+  0 0 Waveradius dup Coeffradius sub 2 div add 0 360 arc stroke
+  ruleline setlinewidth
+} def
+
+%*
+%*   The following three procedures were stolen from the Adobe
+%*   "Blue book".  Together, they place a string along an arc.
+%*
+/pi 3.141592654 def
+/findhalfangle {
+  stringwidth pop 2 div 2 xrad mul pi mul div 360 mul
+} def
+/outsideplacechar {
+  /char exch def  /halfangle char findhalfangle def
+  gsave
+    halfangle neg rotate rad 0 translate -90 rotate
+    char stringwidth pop 2 div neg 0 moveto char show
+  grestore
+  halfangle 2 mul neg rotate
+} def
+%*****  string pointsize centerangle radius  outsidecircletext  -
+/outsidecircletext {
+  /rad exch def  /centerangle exch def
+  /ptsize exch def  /str exch def
+  /xrad rad ptsize 4 div add def
+  gsave
+    centerangle str findhalfangle add rotate
+    str {/charcode exch def ( ) dup 0 charcode put outsideplacechar } forall
+  grestore
+} def
+
+%***** Docircletext
+%*
+%*   Draws all the text which is written along an arc.  What a mess.
+%*
+/Docircletext {
+%  (ANGLE OF TRANSMISSION COEFFICIENT IN DEGREES)
+  (ANGLE OF REFLECTION COEFFICIENT IN DEGREES)
+  5 0 Coeffradius 3 add outsidecircletext
+  (\320> WAVELENGTHS TOWARD GENERATOR \320>)
+  5 166 Waveradius 3 add outsidecircletext
+  (<\320 WAVELENGTHS TOWARD LOAD <\320)
+  5 -166.5 Waveradius 7 sub outsidecircletext
+  /a1 164 def  /u1 a1 cos def  /v1 a1 sin def
+  /a2 108 def  /u2 a2 cos def  /v2 a2 sin def
+  /r Unitradius 0.940 mul def
+  newpath
+    u1 r mul 1 sub v1 r mul 1 sub moveto
+    u1 5 mul v1 5 mul rlineto
+    0 0 r 5 add a1 a2 arcn
+    u2 5 mul neg u2 5 mul neg rlineto
+    0 0 r 1 sub a2 a1 arc
+  closepath currentgray 1 setgray fill setgray
+  (INDUCTIVE REACTANCE COMPONENT \(+jX/Zo\), \
+OR CAPACITIVE SUSCEPTANCE \(+jB/Yo\))
+  5 136 r outsidecircletext
+  gsave 1 -1 scale
+  newpath
+    u1 r mul 1 sub v1 r mul 1 sub moveto
+    u1 5 mul v1 5 mul rlineto
+    0 0 r 5 add a1 a2 arcn
+    u2 5 mul neg u2 5 mul neg rlineto
+    0 0 r 1 sub a2 a1 arc
+  closepath currentgray 1 setgray fill setgray
+  grestore
+  (CAPACITIVE REACTANCE COMPONENT \(-jX/Zo\), \
+OR INDUCTIVE SUSCEPTANCE \(-jB/Yo\))
+  5 -136 r outsidecircletext
+  /u1 Unitradius 0.800 mul neg def
+  (RESISTANCE COMPONENT \(R/Zo\), OR CONDUCTANCE COMPONENT \(G/Yo\))
+  dup stringwidth pop /u2 exch u1 add def
+  newpath
+    u1 -15 moveto
+    u1 -10  lineto
+    u2 -10  lineto
+    u2 -15 lineto
+  closepath currentgray 1 setgray fill setgray
+  u1 1 add -14 moveto show
+  0 setgray
+} def
+
+%*
+%*   These arrays define most of the nomograph lines.  This was the
+%*   fastest way to grind these out (no, really).  The "...labels" array
+%*   gives the values which should be placed along the axis; the "...divs"
+%*   and "...breaks" define the distance between tics, and where the distance
+%*   changes, respectively.
+%*
+/Swrlabels [1.1 1.2 1.4 1.6 1.8 2 2.5 3 4 5 10 20 40 100] def
+/Swrbreaks [1.05 1.2 3 4 5 10 20 40 100] def
+/Swrdivs   [0.05 0.1 0.2 0.5 1 2 10 60] def
+
+/Dbslabels [1 2 3 4 5 6 8 10 15 20 30 40] def
+/Dbsbreaks [0.5 6 20 30 40] def
+/Dbsdivs   [0.5 1 2 5] def
+
+/Attlabels [1 2 3 4 5 7 10 15] def
+/Attbreaks [0.2 5 10 15] def
+/Attdivs  [0.2 0.5 1] def
+
+/Swllabels [1.1 1.2 1.3 1.4 1.6 1.8 2 3 4 5 10 20] def
+/Swlbreaks [1.02 1.2 1.4 2 3 5 10 20 50] def
+/Swldivs   [0.02 0.05 0.1 0.2 0.5 1 5 30] def
+
+/Rldblabels [0 1 2 3 4 5 6 7 8 9 10 12 14 20 30] def
+/Rldbbreaks [0.2 6 10 20 30] def
+/Rldbdivs   [0.2 0.5 1 2] def
+
+/Rcplabels [0.01 0.05 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1] def
+/Rcpbreaks [0.005 .01 0.1 0.5 1] def
+/Rcpdivs   [0.005 0.01 0.02 0.05] def
+
+/Rfllabels [0.1 0.2 0.4 0.6 0.8 1 1.5 2 3 4 5 6 10 15] def
+/Rflbreaks [0.02 0.1 0.2 2 4 6 10 15] def
+/Rfldivs   [0.02 0.05 0.1 0.2 0.5 1 5] def
+
+/Swplabels [1.1 1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 2 2.5 3 4 5 10] def
+/Swpbreaks [1.02 1.5 2 3 4 5 10] def
+/Swpdivs   [0.02 0.05 0.1 0.2 0.5 1] def
+
+/Rclabels [0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1] def
+/Rcbreaks [0 1] def
+/Rcdivs   [0.02] def
+
+/Tcplabels [0.99 0.95 0.9 0.8 0.7 0.6 0.5 0.4 0.3 0.2 0.1 0] def
+/Tcpbreaks [0.05 5 0.9 0.99 0.995] def
+/Tcpdivs   [0.05 0.02 0.01 0.005] def
+
+/Tclabels [1 1.1 1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 2] def
+/Tcbreaks [1 2] def
+/Tcdivs   [0.02] def
+
+%*
+%*   The following functions translate the various quantities to the
+%*   corresponding value of rho.
+%*
+/swr-rho {dup 1 sub exch 1 add div} def		  % Standing-wave ratio
+/dbs-rho {20 div 10 exch exp swr-rho} def	  % 10 log (SWR)
+/att-rho {-10 div 10 exch exp} def		  % Attenuation [dB]
+/swl-rho {dup 1 sub exch 1 add div sqrt} def	  % Standing-wave loss coeff
+/rldb-rho {-20 div 10 exch exp} def		  % Return loss [dB]
+/rcp-rho {0 exch dup 0 ge {exch} if pop sqrt} def % Reflection coeff [dB]
+/tcp-rho {1 sub neg rcp-rho} def		  % (Trans. coeff.)^2
+/rfl-rho {-10 div 10 exch exp tcp-rho} def	  % Reflection loss (a.k.a.
+						  %   mismatch loss) [dB]
+/swp-rho {dup mul swr-rho} def			  % Standing-wave peak
+/tc-rho {1 sub} def				  % A hack :-)
+
+%***** labels brks divs qty-rho lineside direction name  Donomoline  -
+%*
+%*   Does the nomograph line "name" according to "labels", "brks", and
+%*   "divs", on the [left,right] side according to "direction", and on
+%*   the [top/bottom] side according to "lineside".
+%*
+/Donomoline {
+  /name exch def     /direction exch def  /lineside exch def
+  /qty-rho exch def  /divs exch def       /breaks exch def
+  /labels exch def
+
+  /fullscale Unitradius direction mul def
+  /tic 2 lineside mul def
+  0 0 moveto 0 2 rlineto stroke
+  fullscale 0 moveto 0 tic rlineto stroke
+
+  0 1 divs length 1 sub {/ix exch def
+    breaks ix get divs ix get breaks ix 1 add get {
+      qty-rho cvx exec fullscale mul 0 moveto 0 tic rlineto stroke
+    } for
+  } for
+
+  Helvbigfont
+  0 1 labels length 1 sub {
+    labels exch get dup qty-rho cvx exec fullscale mul 0 moveto
+    0 lineside 0 gt {3} {-7} ifelse rmoveto
+    str cvs dup stringwidth pop 2 div neg 0 rmoveto show
+  } for
+
+  fullscale 0 moveto 0.05 fullscale mul 0 rlineto stroke
+  gsave
+    fullscale 1.05 mul 0 translate 45 direction mul rotate
+    0 0 moveto 0.22 fullscale mul 0 lineto stroke
+    lineside 0 gt {3} {-3} ifelse direction mul
+    lineside 0 gt {1} {-5} ifelse moveto
+    direction 0 lt {name stringwidth pop neg 0 rmoveto} if
+    name show
+  grestore
+  Helvfont
+} def
+
+%*****   -  Donomograph  -
+%*
+%*   Draws all the nomograph scales, taking care of pesky "infinity"
+%*   symbols and other asymmetries.  Very tacky.
+%*
+/Donomograph {
+  ruleline setlinewidth
+  0 setgray
+  /str 20 string def
+  gsave
+    0 -4.0 72 mul translate
+    0 0 moveto (RADIALLY SCALED PARAMETERS) dup
+      stringwidth pop 2 div neg 0 rmoveto show
+
+    Helvbigfont
+    0 -0.25 72 mul translate
+    0 .1 72 mul moveto 0 -.1 72 mul lineto stroke  % was: moveto 0 -.5 72 mul
+    Unitradius neg 10 moveto 0 0.65 Unitradius mul rlineto stroke
+    Unitradius 10 moveto 0 0.65 Unitradius mul rlineto stroke
+
+    Rclabels Rcbreaks Rcdivs () 1 -1 (RFL. COEFF, E or I) Donomoline
+      Helvbigfont -4 3 moveto (0) show
+    Rcplabels Rcpbreaks Rcpdivs (rcp-rho) -1 -1 (RFL. COEFF, P) Donomoline
+      Helvbigfont -4 -7 moveto (0) show
+
+    Unitradius neg 0 moveto Unitradius 0 lineto stroke
+    Swrlabels Swrbreaks Swrdivs (swr-rho) 1 1 (SWR) Donomoline
+      Helvbigfont 1 3 moveto (1) show
+      Symbigfont Unitradius 2 add 3 moveto (\245) show Helvbigfont
+    Dbslabels Dbsbreaks Dbsdivs (dbs-rho) -1 1 (dBS) Donomoline
+      Helvbigfont 1 -7 moveto (1) show
+      Symbigfont Unitradius 1 add -7 moveto (\245) show Helvbigfont
+
+    0 -.1 72 mul translate
+    newpath 0 0 moveto -2 -3 lineto 2 -3 lineto 2 -3 lineto closepath fill
+    0 -8 moveto (CENTER) dup stringwidth pop 2 div neg 0 rmoveto show
+
+  Helvfont
+  grestore
+} def
+
+%*****   -  Doflambdabox  -
+%*
+%*  Added 14.04.1996 by Vesa Starck
+%*
+/Doflambdabox {
+  0.2 setlinewidth
+  0 setgray
+  /str 20 string def
+  gsave
+    /fontstash currentfont def
+    /Palatino-Roman findfont 10 scalefont setfont
+    newpath -3.5 72 mul 4.5 72 mul moveto 75 0 rlineto 0 40 rlineto 
+    -75 0 rlineto 0 -40 rlineto 17 0 rmoveto 0 40 rlineto 
+    -17 -20 rmoveto 75 0 rlineto stroke
+    -3.42 72 mul 4.5 72 mul 26 add moveto (f) show
+    /Symbol findfont 10 scalefont setfont
+    -3.42 72 mul 4.5 72 mul 6 add moveto (l) show
+  fontstash setfont
+  grestore
+} def
+
+%*****   -  Dozoyobox  -
+%*
+%*  Added 14.04.1996 by Vesa Starck
+%*
+/Dozoyobox {
+  0.2 setlinewidth
+  0 setgray
+  /str 20 string def
+  gsave
+    /fontstash currentfont def
+    /Palatino-Roman findfont 10 scalefont setfont
+    newpath 2 72 mul 4.5 72 mul 40 sub moveto 100 0 rlineto 0 80 rlineto 
+    -100 0 rlineto 0 -80 rlineto 50 0 rmoveto 0 80 rlineto 
+    -50 -20 rmoveto 100 0 rlineto
+    -100 -20 rmoveto 100 0 rlineto
+    -100 -20 rmoveto 100 0 rlineto stroke
+    2.3 72 mul 4.5 72 mul 26 add moveto (Z) show
+    2.3 72 mul 50 add 4.5 72 mul 26 add moveto (Y) show
+    /vsz (Z) stringwidth pop def
+    /vsy (Y) stringwidth pop def
+    /Palatino-Roman findfont 7 scalefont setfont
+    2.3 72 mul vsz add 4.5 72 mul 24 add moveto (o) show
+    2.3 72 mul vsy add 50 add 4.5 72 mul 24 add moveto (o) show
+  fontstash setfont
+  grestore
+} def
+
+%***** Pointarray Zo  Dodots  -
+%*
+%*   Dodots plots specific points on the chart.  The points are supplied
+%*   as triads of unnormalized resistance, unnormalized reactance, and
+%*   a string label to be associated with the point.  The system impedance
+%*   is given by Zo.
+%*
+/Dodots {
+  /znaught exch def  /pointarray exch def
+  pointarray length 3 mod 0 eq {
+    0 3 pointarray length 3 sub { /ix exch def
+      pointarray ix get znaught div
+      pointarray ix 1 add get znaught div 2 array astore
+      RXtoUV Unitradius mul exch Unitradius mul exch 2 copy moveto
+      2 copy 3 0 360 arc currentgray 0 setgray fill setgray
+      moveto 4 -3 rmoveto
+      currentfont
+        /Helvetica-Bold findfont 8 scalefont setfont
+        pointarray ix 2 add get show
+      setfont
+    } for
+  } if
+} def
+
+%*****  title subtitle param1 ... param6  Dotitles  -
+%*
+%*  Prints nice titles at the top of the page.
+%*
+/Dotitles {
+  /fontstash currentfont def
+    /Palatino-Roman findfont 10 scalefont setfont
+    /Palatino-Roman findfont 14 scalefont setfont
+    0 4.1 72 mul moveto dup stringwidth pop 2 div neg 0 rmoveto show
+    /Palatino-Bold findfont 18 scalefont setfont
+    0 4.4 72 mul moveto dup stringwidth pop 2 div neg 0 rmoveto show
+  fontstash setfont
+} def
+
+%******* Macros for plotting curves on the chart *************
+
+/smith_zo 50 def
+/smith_v 2.9979E+8 def
+/smith_f -1 def
+/smith_lambda -1 def
+/smith_zplane true def
+
+/begin_smith {
+  Docoeffcircle
+%  DoGB
+  DoRX
+  Helvfont
+  Docircletext
+  Dowavecircle
+  Donomograph
+%  Docircletexttwo
+} def
+
+/end_smith {
+} def
+
+/ISarcn {
+  45 sub neg 45 add exch 45 sub neg 45 add exch arcn
+} def
+
+/SumRX {
+  aload pop /vsx exch def /vsr exch def aload pop
+  vsx add exch vsr add exch 2 array astore
+} def
+
+/Virhe {
+  dup length 10 add /str exch string def
+  str 0 (Error   : ) putinterval
+  str 10 3 -1 roll putinterval str
+  /command load dup length 10 add /str exch string def
+  str 0 (Command : ) putinterval
+  str 10 3 -1 roll putinterval str
+%  2 copy
+  = = pstack flush showpage
+  end
+} def
+
+/Cva {
+  /sttr exch def /parray exch def /sttrp 1 def /strr 10 string def
+  sttr 0 ([) putinterval
+  parray {
+    0 1 strr length 1 sub{strr exch 32 put}for
+    strr cvs
+    /il 0 def strr{ 32 ne{/il il 1 add def}if}forall /il il 1 add def
+    sttr sttrp strr putinterval
+    /sttrp sttrp il add store
+  } forall
+  /sttrp sttrp 1 sub store
+  sttr sttrp (]) putinterval
+} def
+
+/ParseRX {
+  /Palatino-Roman findfont 14 scalefont setfont
+  dup type dup /arraytype eq {pop dup length 2 ne{/sstr 50 string def
+     sstr Cva
+     /str 73 string def sstr str 0 (Illegal complex number ) putinterval
+     str 23 3 -1 roll putinterval str Virhe}if}
+  {dup /realtype eq exch /integertype eq or
+  {0 2 array astore}{/sstr 50 string def /str 75 string def
+     sstr cvs sstr str 0 (Illegal formatted number ) putinterval
+     str 25 3 -1 roll putinterval str Virhe}ifelse}ifelse
+} def
+
+/put_Z {/command (put_Z) def
+  ParseRX aload pop smith_zo div exch smith_zo div exch 2 array astore
+  smith_zplane{}{invert}ifelse RXtoUV
+  Unitradius mul exch Unitradius mul exch moveto
+} def
+
+/put_Y {/command (put_Y) def
+  ParseRX aload pop smith_zo mul exch smith_zo mul exch 2 array astore
+  smith_zplane{invert}{}ifelse RXtoUV
+  Unitradius mul exch Unitradius mul exch moveto
+} def
+
+/get_Z {/command (get_Z) def
+  currentpoint Unitradius div exch Unitradius div exch UVtoRX
+  smith_zplane{}{invert}ifelse
+  aload pop smith_zo mul exch smith_zo mul exch 2 array astore
+} def
+
+/get_Y {/command (get_Y) def
+  currentpoint Unitradius div exch Unitradius div exch UVtoRX
+  smith_zplane{invert}{}ifelse
+  aload pop smith_zo div exch smith_zo div exch 2 array astore
+} def
+
+/put_rx {/command (put_tx) def
+  ParseRX RXtoUV Unitradius mul exch Unitradius mul exch moveto
+} def
+
+/get_rx {/command (get_rx) def
+  currentpoint Unitradius div exch Unitradius div exch UVtoRX
+} def
+
+/draw_cross {/command (draw_cross) def
+  currentpoint 2 copy newpath moveto
+  1.2 setlinewidth 1 setlinecap
+  -5 -5 rmoveto 10 10 rlineto -10 0 rmoveto 10 -10 rlineto
+  stroke moveto
+} def
+
+/draw_centre {/command (draw_centre) def
+  gsave newpath 0 0 0.8 0 360 arc stroke
+  newpath 0 0 5.8 0 360 arc stroke
+  grestore
+} def
+
+/draw_centre_rho_angle {/command (draw_centre) def
+  gsave thinline setlinewidth
+  currentpoint exch atan dup % angle of zl, 2 copies
+  cos scalexy mul exch sin scalexy mul % endpt of line from 0,0 at above angle
+  moveto
+  0 0 0.8 0 360 arc stroke
+  grestore
+} def
+
+/draw_start {/command (draw_start) def
+  currentpoint 2 copy newpath moveto
+  1.2 setlinewidth 1 setlinecap
+  -5 -5 rmoveto 10 10 rlineto -10 0 rmoveto 10 -10 rlineto
+  5 2 sqrt 1 sub mul 5 rmoveto
+  2 copy 5 2 sqrt mul 0 360 arc
+  stroke moveto
+} def
+
+/draw_finish {/command (draw_finish) def
+  currentpoint 2 copy newpath moveto
+  1.2 setlinewidth 1 setlinecap
+  -5 -5 rmoveto 10 10 rlineto -10 0 rmoveto 10 -10 rlineto
+  5 2 sqrt 1 sub mul 5 rmoveto
+  2 copy 5 2 sqrt mul 0 360 arc
+  5 1 2 sqrt sub mul 0 rmoveto
+  2 copy 5 0 360 arc
+  stroke moveto
+} def
+
+/draw_textcircle {/command (draw_textcircle) def
+  currentpoint newpath
+  2 copy atan 90 sub neg /kulmat exch def
+  1.1 setlinewidth 1 setlinecap
+  kulmat cos Unitradius mul kulmat sin Unitradius mul moveto
+  kulmat cos Waveradius 26 add mul
+  kulmat sin Waveradius 26 add mul lineto
+  stroke moveto
+} def
+
+/draw_arrow {/command (draw_arrow) def
+  currentpoint 2 copy dup mul dup mul add sqrt 5 gt
+  {newpath 2 copy atan 90 sub neg /kulma exch def
+  2 copy moveto 150 kulma add dup cos 6 mul exch
+     sin 6 mul rlineto
+%  -90 kulma add dup cos 6 mul exch sin 6 mul rlineto
+  -60 kulma add dup cos 2 3 sqrt mul mul exch sin 2 3 sqrt mul mul rlineto
+  -120 kulma add dup cos 2 3 sqrt mul mul exch sin 2 3 sqrt mul mul rlineto
+  closepath fill
+  newpath 1.1 setlinewidth 1 setlinecap
+  2 copy moveto 0 0 lineto stroke
+  stroke moveto draw_textcircle}{pop pop}ifelse
+} def
+
+/move_to_macro1{
+  dup type /stringtype eq{/vsc exch def}{/vsc (0) def}ifelse /vsl exch def
+  currentpoint draw_textcircle
+  2 copy dup mul exch dup mul add sqrt /sade exch def
+  2 copy atan 90 sub neg /kulmab exch def 
+} def
+
+/normal_kulma{
+  dup -180 lt{360 add normal_kulma}if
+  dup 180 gt{360 sub normal_kulma}if
+} def
+
+/move_to_macro5{
+  newpath 1.3 setlinewidth
+  /kulmab kulmab normal_kulma def
+  kulmab kulma lt{/kulma kulma 360 sub def}if
+  moveto 0 0 sade kulmab kulma 360 add arcn stroke
+  newpath vsc 0 get dup 67 eq exch 99 eq or {/vsc 0.5 def}
+  {/vsc vsc cvr def}ifelse
+  vsc 0.001 gt {/kulmab kulmab kulma kulmab sub vsc mul add def
+  sade kulmab cos mul sade kulmab sin mul moveto
+  60 kulmab add dup cos 10 mul exch sin 10 mul rlineto
+  -150 kulmab add dup cos 10 3 sqrt div mul exch sin 10 3 sqrt div mul rlineto
+  -210 kulmab add dup cos 10 3 sqrt div mul exch sin 10 3 sqrt div mul rlineto
+  closepath fill}if
+  sade kulma cos mul sade kulma sin mul moveto
+  draw_textcircle
+} def
+
+/move_to_upper_real_circ{/command (move_to_upper_real_circ) def
+  move_to_macro1
+  /kulma vsl 1 sub 2 div vsl div
+      sade Unitradius div dup mul 2 div 1 1 vsl div add mul add
+      dup dup mul sade Unitradius div dup mul sub neg sqrt exch
+      atan def 
+  move_to_macro5
+} def
+
+/move_to_lower_real_circ{/command (move_to_upper_real_circ) def
+  move_to_macro1
+  /kulma vsl 1 sub 2 div vsl div
+      sade Unitradius div dup mul 2 div 1 1 vsl div add mul add
+      dup dup mul sade Unitradius div dup mul sub neg sqrt neg exch
+      atan def 
+  move_to_macro5
+} def
+
+/move_lambdas_to_gen {/command (move_lambdas_to_gen) def
+  move_to_macro1
+  /kulma kulmab vsl 720 mul sub def 
+  move_to_macro5
+} def
+
+/move_metres_to_gen {/command (move_metres_to_gen) def
+  move_to_macro1
+  /kulma kulmab vsl smith_v div smith_f mul 720 mul sub def 
+  move_to_macro5
+} def
+/unnormalize {/command (unnormalize) def
+  ParseRX aload pop smith_zplane{smith_zo mul exch smith_zo mul exch}
+  {smith_zo div exch smith_zo div exch} ifelse
+  2 array astore
+} def
+
+/normalize {/command (normalize) def
+  ParseRX aload pop smith_zplane{smith_zo div exch smith_zo div exch}
+  {smith_zo mul exch smith_zo mul exch} ifelse
+  2 array astore
+} def
+
+/negate {
+  aload pop neg exch neg exch 2 array astore
+} def
+
+/invert {
+  aload pop 2 copy dup mul exch dup mul add dup
+  4 -1 roll exch div 3 1 roll div neg 2 array astore
+} def
+
+/add_parallel_Z {/command (add_parallel_Z) def
+  ParseRX invert
+  smith_zplane{exch invert SumRX invert}{SumRX}ifelse
+} def
+
+/add_parallel_Y {/command (add_parallel_Y) def
+  ParseRX
+  smith_zplane{exch invert SumRX invert}{SumRX}ifelse
+} def
+
+/add_serial_Z {/command (add_serial_Z) def
+  ParseRX
+  smith_zplane{SumRX}{exch invert SumRX invert}ifelse
+} def
+
+/add_serial_Y {/command (add_serial_Y) def
+  ParseRX invert
+  smith_zplane{SumRX}{exch invert SumRX invert}ifelse
+} def
+
+/add_parallel_sc_stub_Y {/command (add_parallel_sc_stub_Y) def
+  ParseRX aload pop smith_zo mul 0 exch 2 array astore
+  smith_zplane{move_zo_to_yo}if
+  RXtoUV exch atan /kulma exch def /kulmab 0 def
+  currentpoint Unitradius 0 2 copy moveto draw_textcircle
+  /vsc (0.5) def /sade Unitradius def
+  move_to_macro5
+  newpath 1.3 setlinewidth 2 copy moveto Unitradius div /vsy exch def
+  Unitradius div /vsx exch def vsx vsy UVtoRX
+  0 get /vsr exch def /vsm vsr dup 1 add div Unitradius mul def
+  /sade 1 vsr 1 add div Unitradius mul def
+  /kulma vsy vsr dup 1 add div vsx sub neg atan def
+  vsm 0 sade kulma 180
+  vsy 0 lt{arcn}{arc}ifelse stroke
+  /kulma kulma 180 add 2 div def
+  vsm 0 moveto sade kulma cos mul sade kulma sin mul rmoveto
+  vsy 0 lt{60}{240}ifelse
+    kulma add dup cos 10 mul exch sin 10 mul rlineto
+  vsy 0 lt{-150}{30}ifelse
+    kulma add dup cos 10 3 sqrt div mul exch sin 10 3 sqrt div mul rlineto
+  vsy 0 lt{-210}{-30}ifelse
+    kulma add dup cos 10 3 sqrt div mul exch sin 10 3 sqrt div mul rlineto
+  closepath fill
+  vsm sade sub 0 moveto
+} def
+
+/add_parallel_oc_stub_Y {/command (add_parallel_oc_stub_Y) def
+  ParseRX aload pop smith_zo mul 0 exch 2 array astore
+  smith_zplane{move_zo_to_yo}if
+  RXtoUV exch atan /kulma exch def /kulmab 180 def
+  currentpoint Unitradius neg 0 2 copy moveto draw_textcircle
+  /vsc (0.5) def /sade Unitradius def
+  move_to_macro5
+  newpath 1.3 setlinewidth 2 copy moveto Unitradius div /vsy exch def
+  Unitradius div /vsx exch def vsx vsy UVtoRX
+  0 get /vsr exch def /vsm vsr dup 1 add div Unitradius mul def
+  /sade 1 vsr 1 add div Unitradius mul def
+  /kulma vsy vsr dup 1 add div vsx sub neg atan def
+  vsm 0 sade kulma 180
+  vsy 0 lt{arcn}{arc}ifelse stroke
+  /kulma kulma 180 add 2 div def
+  vsm 0 moveto sade kulma cos mul sade kulma sin mul rmoveto
+  vsy 0 lt{60}{240}ifelse
+    kulma add dup cos 10 mul exch sin 10 mul rlineto
+  vsy 0 lt{-150}{30}ifelse
+    kulma add dup cos 10 3 sqrt div mul exch sin 10 3 sqrt div mul rlineto
+  vsy 0 lt{-210}{-30}ifelse
+    kulma add dup cos 10 3 sqrt div mul exch sin 10 3 sqrt div mul rlineto
+  closepath fill
+  vsm sade sub 0 moveto
+} def
+
+/set_smith_Zo {/command (set_smith_zo) def
+  /smith_zo exch def
+} def
+
+/set_smith_f {/command (set_smith_f) def
+  /smith_f exch def
+} def
+
+/set_smith_v {/command (set_smith_v) def
+  /smith_v exch def
+} def
+
+/set_smith_lambda {/command (set_smith_lambda) def
+  /smith_lambda exch def
+} def
+
+/move_Zo_to_Yo {/command (move_Zo_to_Yo) def
+  smith_zplane{/smith_zplane false def}{(Smith diagram already normalized to yo) Virhe}ifelse
+  currentpoint neg exch neg exch moveto
+} def
+
+/move_Yo_to_Zo {/command (move_Yo_to_Zo) def
+  smith_zplane{(Smith diagram already normalized to zo) Virhe}{/smith_zplane true def}ifelse
+  currentpoint neg exch neg exch moveto
+} def
+
+/mark_rho {
+  currentpoint 2 copy dup mul exch dup mul add sqrt
+  newpath 1.3 setlinewidth
+  0 -4.55 72 mul moveto
+  0 4 rlineto 0 -4 rmoveto
+  neg 0 rlineto
+  0 15 rlineto
+  stroke moveto
+} def
+
+/mark_SAS {
+  currentpoint 2 copy dup mul exch dup mul add sqrt
+  newpath 1.3 setlinewidth
+  0 -4.55 72 mul moveto
+  0 4 rlineto 0 -4 rmoveto
+  0 rlineto
+  0 15 rlineto
+  stroke moveto
+} def
+
+/match_with_parallel_sc_stub{
+  1 (c) move_to_upper_real_circ draw_cross get_Y
+  negate add_parallel_sc_stub_Y
+} def
+
+/match_with_parallel_sc_stub2{
+  1 (c) move_to_lower_real_circ draw_cross get_Y
+  negate add_parallel_sc_stub_Y
+} def
+
+/match_with_parallel_oc_stub{
+  1 (c) move_to_upper_real_circ draw_cross get_Y
+  negate add_parallel_oc_stub_Y
+} def
+
+/match_with_parallel_oc_stub2{
+  1 (c) move_to_lower_real_circ draw_cross get_Y
+  negate add_parallel_oc_stub_Y
+} def
+
+
+%  --------- the user defined part starts at here -------------
+begin_smith
+
+2.5e9 				set_smith_f
+299792458			set_smith_v
+1					set_smith_Zo % Normalized
+
+0 0.8 0				setrgbcolor
+[0.460 0.565]		put_Z
+1e-15				move_lambdas_to_gen
+-1e-15				move_lambdas_to_gen
+					draw_start
+
+[0.460 -0.565]		put_Z
+1e-15				move_lambdas_to_gen
+-1e-15				move_lambdas_to_gen
+					draw_start
+					
+1 0 0				setrgbcolor
+					move_Zo_to_Yo
+					draw_cross
+					
+					1 (c) move_to_lower_real_circ 
+					draw_cross 
+					get_Y 
+					negate 
+0 0 1				setrgbcolor
+					add_parallel_oc_stub_Y
+					draw_finish
+																
+0 0 1				setrgbcolor
+					move_Yo_to_Zo
+[0 0]				put_Z
+					draw_cross
+[0 1.153]			put_Z
+					draw_cross
+			
+end_smith
+
+
+%(TST-laboratorio)
+%(S-55.142 Piirianalyysi 2)
+%Dotitles
+
+showpage

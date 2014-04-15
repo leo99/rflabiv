@@ -82,6 +82,7 @@ function [f, s, z] = readSparamFile(fname, debug)
 		end
 
 		% Read actual data & close file
+		fseek(fid, 0, -1);
 		data = textscan(fid, ['%f', repmat(' %f', 1, 2 * ports^2)], ...
 			'headerlines', startline);
 		fclose(fid);
@@ -94,20 +95,21 @@ function [f, s, z] = readSparamFile(fname, debug)
 		s = zeros(length(f), ports^2);
 
 		for k = 1 : ports^2
+			SS = 0;
 			switch format
 				case 1	% MA
-					S = data{2 * k} .* exp(1i * data{2 * k + 1} * (pi / 180));
+					SS = data{2 * k} .* exp(1i * data{2 * k + 1} * (pi / 180));
 				case 2	% RI
-					S = data{2 * k} + 1i * data{2 * k + 1};
+					SS = data{2 * k} + 1i * data{2 * k + 1};
 				case 3	% DB
-					S = 10 .^ (data{2 * k} / 20) .* exp(1i * data{2 * k + 1} * (pi / 180));
+					SS = 10 .^ (data{2 * k} / 20) .* exp(1i * data{2 * k + 1} * (pi / 180));
 			end
 
 			% flip orientation (ensure col-vector)
-			if size(S, 2) == length(S)
-				s(:, k) = S.';
+			if size(SS, 2) == length(SS)
+				s(:, k) = SS.';
 			else
-				s(:, k) = S;
+				s(:, k) = SS;
 			end
 		end
 
