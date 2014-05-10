@@ -1,0 +1,12 @@
+\select@language {english}
+\contentsline {section}{Abstract}{1}{section*.1}
+\contentsline {section}{Contents}{2}{section*.1}
+\contentsline {section}{Symbols and abbreviations}{3}{section*.3}
+\contentsline {section}{\numberline {1}Introduction}{5}{section.1}
+\contentsline {section}{\numberline {2}Theoretical background}{6}{section.2}
+\contentsline {section}{\numberline {3}Preliminary design}{7}{section.3}
+\contentsline {section}{\numberline {4}Design}{8}{section.4}
+\contentsline {section}{\numberline {5}Measurements}{10}{section.5}
+\contentsline {section}{\numberline {6}Results}{11}{section.6}
+\contentsline {section}{\numberline {7}Conclusions}{12}{section.7}
+\contentsline {section}{\numberline {8}Feedback}{13}{section.8}
