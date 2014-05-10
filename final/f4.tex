@@ -170,7 +170,10 @@ Text
 		\item[$y$] 						normalized admittance
 		\item[$\lambda$] 				wavelength [m]
 		\item[$F$] 						noise figure [dB]
-		\item[$G$] 						two-port gain equal to $|S_{21}|$ [dB]
+		\item[$G_0$] 					power gain, equal to $|S_{21}|$ [dB]
+		\item[$G_\mathrm{A}$] 			available power gain [dB]
+		\item[$G_\mathrm{T}$] 			transducer power gain [dB]
+		\item[$G_\mathrm{P}$] 			operating power gain [dB]
 		\item[$L$] 						attenuation [dB]
 		\item[$S_{ij}$] 				scattering parameter from port $i$ to port $j$
 		\item[$\mathit{BW}$] 			bandwidth [Hz]
@@ -208,13 +211,36 @@ Text
 		\item[IDCS]					inductively degenerated common source
 		\item[PTH]					plated-through hole, a via
 		\item[PCB]					printed circuit board
-		\item[ADS]					Agilent Advanced Design System, a computer-aided design software
+		\item[CAD]					computer-aided design
+		\item[ADS]					Agilent Advanced Design System, a CAD software
 	\end{description}
 
 \newpage
 \section{Introduction}
 
-Text
+Topic/Field -- overview (one paragraph)
+
+Topic/Field -- a closer look (one paragraph)
+
+In the fourth lab exercise during the \textit{S-26.3120 Radio Engineering, laboratory course} 
+a low-noise amplifier (LNA) is to be designed, fabricated and measured. The lab was divided into 
+checkpoints as follows. First there was a individually completed pre-study, based on which 
+the actual amplifier was to be designed in groups using computer-aided design (CAD) tools. 
+For this purpose, Agilent Advanced Design System (ADS) was used.
+
+Using ADS, we created a suitable microstrip layout for our amplifier. Next, a third-party 
+manufacturer fabricated a printed circuit board (PCB) according to our specifications. 
+The amplifier was then fabricated using this board, given transistor and miscellaneous 
+components. The amplifier was then tested and measured rigorously. All of this was to be 
+documented in a detailed lab report.
+
+This document is the final report of this lab exercise and is organized ad follows. 
+In the section following the introduction, theoretical background governing LNA design is 
+presented briefly. In the third section, the preliminary design used as a the starting 
+point of the group work is shown. Section \ref{s:design} gives explains the final amplifier 
+designed with ADS in detail. In the two sections following this explanation, measurements 
+and obtained results are presented. The second to last section draws the conclusion. 
+Finally, in the last section, feedback and suggestions to improve this course are given.
 
 \newpage
 \section{Theoretical background}
@@ -224,8 +250,28 @@ Text
 \newpage
 \section{Preliminary design}
 
+In this section, the preliminary design used as a starting point for the group work is presented. 
+This presentation is intentionally rather short, presenting only the main points of the manual 
+design procedure and the crude pre-design. For a more complete depiction of the derivation of 
+the amplifier circuit shown in this section, the reader is advised to get acquanted with the 
+pre-study reports.
+
+The preliminary design is based solely on linear (and also otherwise ``ideal'') scattering 
+parameter analysis; a process with a direct connection to the theory shown in the previous 
+chapter and in textbooks like \cite{bahl, gonz, pozar}. The process is manual in the sense 
+that no purpose-built CAD tools were used. Thus it is indeed possible to obtain same results 
+with a ``back-of-the-envelope'' approach albeit extremely cumbersome. To help with this, 
+a completely self-made Matlab-script was used.
+
+A cicruit schematic of the pre-design is shown in Fig.~\ref{f:pre}. In the three tables following 
+the figure, the key characteristics of the preliminary design are shown. Table~\ref{t:pre1} presents 
+the reflection coefficients used for matching. These reflection coffecients are realized single 
+shunt-stub matching with transmission line lengths given in Table~\ref{t:pre2}. In Table~\ref{t:pre3}, 
+the obtained key performance metrics are compared with design goals. All design goals are met simultaneously.
+
 \begin{figure}[!h]
 	\centering
+	\vspace*{\oneLine}
 	\includegraphics[scale=1]{img/pre.png}
 	\setlength{\unitlength}{1mm}
 	\begin{picture}(1,1)
@@ -238,11 +284,66 @@ Text
 		\put(-1, 16){\small OUT}
 	\end{picture}
 	\caption{Amplifier pre-design ($Z_0 = 50\;\Omega$).}
-	\label{f:c}
+	\label{f:pre}
 \end{figure}
 
+
+\begin{table}[!h]
+	\begin{center}
+		\caption{Reflection coefficients of the preliminary design.}
+		\label{t:pre1}
+		\renewcommand{\arraystretch}{1.2}
+		\begin{tabular}{lcccccc}
+			\multicolumn{3}{l}{Reflection coefficient}	& & {Cartesian}	& & Polar 	\\
+			\hline
+			Source 	& & $\rho_\mathrm{S}$		& &	$-0.191 + \mathrm{j} 0.461$ & &  $0.499 \,\angle {+112.6 {\,}^\circ}$  	\\
+			Input 	& & $\rho_\mathrm{in}$		& &	$-0.307 - \mathrm{j} 0.503$	& & $0.589 \,\angle {-121.5 {\,}^\circ}$  	\\
+			Load 	& & $\rho_\mathrm{L}$		& &	$+0.461 + \mathrm{j} 0.171$	& & $0.492 \,\angle {+20.4 {\,}^\circ}$  	\\				
+			Output 	& & $\rho_\mathrm{out}$		& &	$+0.461 - \mathrm{j} 0.171$	& & $0.492 \,\angle {-20.4 {\,}^\circ}$  				
+		\end{tabular}
+	\end{center}
+	\vspace{-1\oneLine}
+\end{table}
+
+\begin{table}[!h]
+	\begin{center}
+		\caption{Matching circuits of the pre-design ($Z_0 = 50\;\Omega$).}
+		\label{t:pre2}
+		\renewcommand{\arraystretch}{1.2}
+		\begin{tabular}{lccc}
+			Port		&	Distance from transistor $l_1$ [$\lambda$]	& Stub length $l_2$ [$\lambda$]	\\
+			\hline
+			Input		&	0.177										& 0.136				\\
+			Output		&	0.306										& 0.135			
+		\end{tabular}
+	\end{center}
+	\vspace{-\oneLine}
+\end{table}
+
+\begin{table}[!h]
+	\begin{center}
+		\caption{Properties of the pre-design.}
+		\label{t:pre3}
+		\renewcommand{\arraystretch}{1.2}
+		\begin{tabular}{lccc}
+			Parameter						&	Value [dB]	& Design goal [dB] 	& Margin [dB]	\\
+			\hline
+			$\mathit{RL}_\mathrm{in}$		&	15.22		& $\geq 15$ 		& 0.22			\\
+			$\mathit{RL}_\mathrm{out}$		&	$\infty$	& $\geq 15$  		& $\infty$		\\
+			$G_\mathrm{A}$					&	13.35		& $\geq 13$  		& 0.35			\\				
+			$G_\mathrm{T}$					&	13.35		& $\geq 13$  		& 0.35			\\
+			$G_\mathrm{P}$					&	13.49		& $\geq 13$  		& 0.49			\\
+			$F$								&	0.737		& $\leq 0.8$ 		& 0.062				
+		\end{tabular}
+	\end{center}
+	\vspace{-1\oneLine}
+\end{table}
+
+\newpage
+\vspace*{0pt}
 \newpage
 \section{Design}
+\label{s:design}
 
 After obtaining a preliminary starting point for the design it was time to pursue 
 the actual design with ADS simulations. In ADS, the final balancing resistor, 
@@ -250,7 +351,7 @@ biasing networks and matching networks were to be designed and optimized. For
 the simulations, the used PCB material was assigned as RT-Duroid 5870 (Cu 1.0 oz/ft$^2$) 
 with $\epsilon_\mathrm{r} = 2.33 \pm 0.02$, $h = 0.787 \pm 0.003$~mm, $t = 35$~um, and $\tan \delta = 0.0012$. 
 The dimensions of the circuit board were $70 \times 85 \; \mathrm{mm}^2$. Fig. \ref{f:lo} 
-presents the final amplifier layout. The layout comprises of five individual 
+presents the final amplifier layout. The layout consists of five individual 
 sections, namely, the transistor section (a), input and output biasing networks 
 (a,b) and input and output matching networks (d,e). 
 
@@ -264,9 +365,11 @@ sections, namely, the transistor section (a), input and output biasing networks
 		\put(-26.5, 58){\small{(c)}}
 		\put(-76, 17){\small{(d)}}
 		\put(-9.4, 18){\small{(e)}}
+		\put(-83, 26){\small{IN}}
+		\put(-2.5, 23.5){\small{OUT}}
 	\end{picture}
-	\caption{The final amplifier layout comprising of: (a) Transistor section, (b) Input biasing, 
-		(c) Output biasing, (d) Input matching and (e) Output matching.}
+	\caption{The final amplifier layout comprising (a) transistor section, (b) input biasing, 
+		(c) output biasing, (d) input matching and (e) output matching.}
 	\label{f:lo}
 \end{figure}
 
@@ -609,10 +712,6 @@ Text
 \newpage
 \begin{thebibliography}{9}%\itemsep 7pt\parskip -5pt 
 	
-\bibitem{lsh} C.\ Icheln (edited), 
-	\textit{Lecture supplement handout},
-	S-26.3120 Laboratory course in Radio Engineering course material.
-	
 \bibitem{bahl} I.\ J.\ Bahl, 
 	\textit{Fundamentals of RF and Microwave Transistor Amplifiers},
 	J.\ Wiley \& Sons, 2009.
@@ -624,6 +723,10 @@ Text
 \bibitem{pozar} D.\ M.\ Pozar, 
 	\textit{Microwave Engineering}, 
 	J.\ Wiley \& Sons, 4th Ed., 2012.
+	
+\bibitem{lsh} C.\ Icheln (edited), 
+	\textit{Lecture supplement handout},
+	S-26.3120 Laboratory course in Radio Engineering course material.
 
 \end{thebibliography}
 
