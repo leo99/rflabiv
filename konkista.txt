@@ -1,0 +1,38 @@
+Therefore, a capacitor
+will provide its lowest impedance path required for
+optimal coupling and bypass functionality at its series
+resonant frequency.
+
+In bypass applications, it is desirable to operate at the
+capacitor’s FSR where the impedance is essentially equal
+to the ESR and zero net reactance. For the best practical
+solution, the author suggests selecting the lowest
+standard EIA capacitor value that exhibits an FSR that
+is slightly higher than the application bypass frequency.
+
+Edge mounting a capacitor, i.e. electrodes
+normal to the ground plane, is typically taken as the
+optimal orientation, as it yields the benefit of greatly
+suppressing odd order parallel resonances.
+
+In bypass applications the flat mount scenario with
+electrodes parallel to the ground plane may prove to be
+more advantageous because the net inductance resulting
+from this mounting orientation is lower.
+
+The use of larger diameter via holes is preferable
+in order to minimize the associated inductance.
+
+They (multiple caps) are selected such that their self-resonant
+frequencies are staggered in order to cover a wide
+range of frequencies with reasonably low loss. The number
+of required capacitive elements depends on the loss
+and impedance characteristics of each element over the
+intended frequency band segments.
+
+Capacitor elements C2, C3 and C4
+are staggered in value and are selected so that the
+impedance and inductive reactance of each will be low at
+successive frequency segments in order to offer continuous
+bypassing of frequencies below the amplifier’s operating
+band.
