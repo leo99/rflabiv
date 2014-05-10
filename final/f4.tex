@@ -160,39 +160,39 @@ Text
 \subsection*{Symbols}
 
 	\begin{description}[font=\rmfamily\mdseries, leftmargin=25.5mm, style=sameline, align=right, labelsep=5mm, itemsep=-2pt]
-		\item[$R$]					resistance [$\Omega$]
-		\item[$C$]					capacitance [F]
-		\item[$L$]					inductance [H]
-		\item[$f$] 					frequnecy [Hz]
-		\item[$Z$] 					impedance [$\Omega$]
-		\item[$Y$] 					admittance [S]
-		\item[$z$] 					normalized impedance
-		\item[$y$] 					normalized admittance
-		\item[$\lambda$] 			wavelength [m]
-		\item[$F$] 					noise figure [dB]
-		\item[$G$] 					two-port gain equal to $|S_{21}|$ [dB]
-		\item[$L$] 					attenuation [dB]
-		\item[$S_{ij}$] 			scattering parameter from port $i$ to port $j$
-		\item[$\mathit{BW}$] 		bandwidth [Hz]
-		\item[$\mathit{IIP}_n$] 	$n$th order input-referred intermodulation intercept point [dBm]
-		\item[$\mathit{IM}_n$] 		$n$th order intermodulation product [dBm]
-		\item[$\mathit{ICP}$] 		1~dB input compression point [dBm]
-		\item[$P$] 					signal power [dBm]
-		\item[$N$] 					noise power [dBm]
-		\item[$T$] 					temperature [K]
-		\item[$w$] 					transmission line width [m]
-		\item[$h$] 					substrate height [m]
-		\item[$\tan \delta$]		``tangent delta'', a merit of substrate quality (attenuation)
-		\item[$\epsilon_\mathrm{r}$]			relative permittivity of the substrate
-		\item[$V$]					voltage [V]
-		\item[$I$]					current [I]
-		\item[$U$]					unilateral figure of merit [U]
-		\item[$\Delta$]				determinant of a scattering matrix
-		\item[$K$]					Rollet's stability factor
-		\item[$\mu$]				stability factor
-		\item[$\rho$]				reflection coefficient
-		\item[$\textit{RL}$] 		return loss [dB]
-		\item[$l$]					transmission line length
+		\item[$R$]						resistance [$\Omega$]
+		\item[$C$]						capacitance [F]
+		\item[$L$]						inductance [H]
+		\item[$f$] 						frequnecy [Hz]
+		\item[$Z$] 						impedance [$\Omega$]
+		\item[$Y$] 						admittance [S]
+		\item[$z$] 						normalized impedance
+		\item[$y$] 						normalized admittance
+		\item[$\lambda$] 				wavelength [m]
+		\item[$F$] 						noise figure [dB]
+		\item[$G$] 						two-port gain equal to $|S_{21}|$ [dB]
+		\item[$L$] 						attenuation [dB]
+		\item[$S_{ij}$] 				scattering parameter from port $i$ to port $j$
+		\item[$\mathit{BW}$] 			bandwidth [Hz]
+		\item[$\mathit{IIP}_n$] 		$n$th order input-referred intermodulation intercept point [dBm]
+		\item[$\mathit{IM}_n$] 			$n$th order intermodulation product [dBm]
+		\item[$\mathit{ICP}$] 			1~dB input compression point [dBm]
+		\item[$P$] 						signal power [dBm]
+		\item[$N$] 						noise power [dBm]
+		\item[$T$] 						temperature [K]
+		\item[$w$] 						transmission line width [m]
+		\item[$h$] 						substrate height [m]
+		\item[$\tan \delta$]			``tangent delta'', a merit of substrate quality (attenuation)
+		\item[$\epsilon_\mathrm{r}$]	relative permittivity of the substrate
+		\item[$V$]						voltage [V]
+		\item[$I$]						current [I]
+		\item[$U$]						unilateral figure of merit [U]
+		\item[$\Delta$]					determinant of a scattering matrix
+		\item[$K$]						Rollet's stability factor
+		\item[$\mu$]					stability factor
+		\item[$\rho$]					reflection coefficient
+		\item[$\textit{RL}$] 			return loss [dB]
+		\item[$l$]						transmission line length
 	\end{description}
 
 \newpage
@@ -208,6 +208,7 @@ Text
 		\item[IDCS]					inductively degenerated common source
 		\item[PTH]					plated-through hole, a via
 		\item[PCB]					printed circuit board
+		\item[ADS]					Agilent Advanced Design System, a computer-aided design software
 	\end{description}
 
 \newpage
@@ -224,21 +225,20 @@ Text
 \section{Preliminary design}
 
 \begin{figure}[!h]
-	\begin{center}
-		\includegraphics[scale=1]{img/pre.png}
-		\setlength{\unitlength}{1mm}
-		\begin{picture}(1,1)
-			\put(-71, 13.3){\small IN}
-			\put(-56.5, 16.7){\small$0.177\;\lambda$}
-			\put(-72.5, 6){\small$0.136\;\lambda$}
-			\put(-34, 12){\small$100\;\Omega$}
-			\put(-23.5, 19.5){\small$0.306\;\lambda$}
-			\put(-7, 9){\small$0.135\;\lambda$}
-			\put(-1, 16){\small OUT}
-		\end{picture}
-		\caption{Amplifier pre-design ($Z_0 = 50\;\Omega$).}
-		\label{f:c}
-	\end{center}
+	\centering
+	\includegraphics[scale=1]{img/pre.png}
+	\setlength{\unitlength}{1mm}
+	\begin{picture}(1,1)
+		\put(-71, 13.3){\small IN}
+		\put(-56.5, 16.7){\small$0.177\;\lambda$}
+		\put(-72.5, 6){\small$0.136\;\lambda$}
+		\put(-34, 12){\small$100\;\Omega$}
+		\put(-23.5, 19.5){\small$0.306\;\lambda$}
+		\put(-7, 9){\small$0.135\;\lambda$}
+		\put(-1, 16){\small OUT}
+	\end{picture}
+	\caption{Amplifier pre-design ($Z_0 = 50\;\Omega$).}
+	\label{f:c}
 \end{figure}
 
 \newpage
@@ -255,22 +255,20 @@ sections, namely, the transistor section (a), input and output biasing networks
 (a,b) and input and output matching networks (d,e). 
 
 \begin{figure}[!h]
-	\begin{center}
-		\includegraphics[scale=1]{img/layout.png}
-		\setlength{\unitlength}{1mm}
-		\begin{picture}(1,1)
-			\put(-32, 27.5){\small{(a)}}
-			\put(-60.5, 58){\small{(b)}}
-			\put(-26.5, 58){\small{(c)}}
-			\put(-76, 17){\small{(d)}}
-			\put(-9.4, 18){\small{(e)}}
-		\end{picture}
-		\caption{The final amplifier layout comprising of: (a) Transistor section, (b) Input biasing, 
-			(c) Output biasing, (d) Input matching and (e) Output matching.}
-		\label{f:lo}
-	\end{center}
+	\centering
+	\includegraphics[scale=1]{img/layout.png}
+	\setlength{\unitlength}{1mm}
+	\begin{picture}(1,1)
+		\put(-32, 27.5){\small{(a)}}
+		\put(-60.5, 58){\small{(b)}}
+		\put(-26.5, 58){\small{(c)}}
+		\put(-76, 17){\small{(d)}}
+		\put(-9.4, 18){\small{(e)}}
+	\end{picture}
+	\caption{The final amplifier layout comprising of: (a) Transistor section, (b) Input biasing, 
+		(c) Output biasing, (d) Input matching and (e) Output matching.}
+	\label{f:lo}
 \end{figure}
-
 
 
 The transistor section includes the transistor followed by the stabilizing resistor. 
@@ -298,50 +296,50 @@ reflections whereas the capacitors short the RF signals directly to the ground. 
 absorbing resistors were found to be adequate. Three capacitors (1 pF, 10 pF and 100 pF, MURATA 
 GQM series) were used for the shorting. Due to the non-ideality of the capacitors they provide 
 an enhanced shorting to the ground. The grounding was made using four via-holes. The correct 
-biasing gate to source voltage, $V_{\mathrm{GS}}$ was derived with an DC analysis in which the 
-$V_{\mathrm{GS}}$ was swept to result in the required biasing current $I_{\mathrm{DS}}$. The 
-result of the DC analysis is presented in Fig. \ref{Sim_Bias_point}. Thus the correct biasing 
-was achieved with $V_{\mathrm{GS}}=-0.39 \,\mathrm{V}$. The voltage drop due to the absorbing 
+biasing gate to source voltage, $V_\mathrm{GS}$ was derived with an DC analysis in which the 
+$V_\mathrm{GS}$ was swept to result in the required biasing current $I_\mathrm{DS}$. The 
+result of the DC analysis is presented in Fig. \ref{f:bias}. Thus the correct biasing 
+was achieved with $V_\mathrm{GS} = -0.39$~V. The voltage drop due to the absorbing 
 resistor should be accounted by increasing the source DC voltage by the equivalent amount. In 
 the input biasing network the voltage drop is insignificant due to the low current whereas at 
-the output it is significant, namely, $15 \, \Omega * 30 \, \mathrm{mA} = 0.45 \,\mathrm{V}$.
+the output it is significant, namely, $15 \; \Omega \cdot 30 \; \mathrm{mA} = 0.45$~V.
 
 \begin{figure}[!h]
-\centering
-\begin{tikzpicture}
-\begin{axis}[
-/pgf/number format/.cd,
-1000 sep={},
-ylabel=$I_\mathrm{DS} \, \mathrm{[mA]}$,
-xlabel=$V_\mathrm{DS} \, \mathrm{[V]}$,
-width=3.5in,
-height=1.86in,
-ymin=0,
-ymax=45,
-xmax=5,
-xmin=0,
-ytick={0,5,...,45},
-grid=both,
-%legend cell align=left,
-%legend style={
-%at={(0.01,0.02)},
-%anchor=south west}
-legend pos=south east
-]
-\addplot+[mark=none, color=red, solid] table[x=VDS,y=IDS_VGS_m44] {data/Simulations/Bias_point_all.txt};
-\addlegendentry{$V_\mathrm{GS} = -4.4$~V}
-\addplot+[mark=none, color=blue, solid] table[x=VDS,y=IDS_VGS_m39] {data/Simulations/Bias_point_all.txt};
-\addlegendentry{$V_\mathrm{GS} = -3.9$~V}
-\addplot+[mark=none, color=green, solid] table[x=VDS,y=IDS_VGS_m34] {data/Simulations/Bias_point_all.txt};
-\addlegendentry{$V_\mathrm{GS} = -3.4$~V}
-\addplot+[sharp plot, mark=none, color=black, solid] coordinates
-{(2,-1) (2,50)};
-\addplot+[sharp plot, mark=none, color=black, solid] coordinates
-{(-1,30) (6,30)};
-\end{axis}
-\end{tikzpicture}
-\caption{Bias point DC analysis. 
-\label{Sim_Bias_point}}
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+		/pgf/number format/.cd,
+		1000 sep={},
+		ylabel=$I_\mathrm{DS} \, \mathrm{[mA]}$,
+		xlabel=$V_\mathrm{DS} \, \mathrm{[V]}$,
+		width=3.5in,
+		height=1.86in,
+		ymin=0,
+		ymax=45,
+		xmax=5,
+		xmin=0,
+		ytick={0,5,...,45},
+		grid=both,
+		%legend cell align=left,
+		%legend style={
+		%at={(0.01,0.02)},
+		%anchor=south west}
+		legend pos=south east
+		]
+		\addplot+[mark=none, color=red, solid] table[x=VDS,y=IDS_VGS_m44] {data/Simulations/Bias_point_all.txt};
+		\addlegendentry{$V_\mathrm{GS} = -4.4$~V}
+		\addplot+[mark=none, color=blue, solid] table[x=VDS,y=IDS_VGS_m39] {data/Simulations/Bias_point_all.txt};
+		\addlegendentry{$V_\mathrm{GS} = -3.9$~V}
+		\addplot+[mark=none, color=green, solid] table[x=VDS,y=IDS_VGS_m34] {data/Simulations/Bias_point_all.txt};
+		\addlegendentry{$V_\mathrm{GS} = -3.4$~V}
+		\addplot+[sharp plot, mark=none, color=black, solid] coordinates
+		{(2,-1) (2,50)};
+		\addplot+[sharp plot, mark=none, color=black, solid] coordinates
+		{(-1,30) (6,30)};
+		\end{axis}
+	\end{tikzpicture}
+	\caption{Bias point DC analysis.}
+	\label{f:bias}
 \end{figure}
 
 After designing the biasing networks they were attached to the amplifier. 
@@ -363,122 +361,122 @@ $\textit{RL}_\mathrm{in} = 22.5 \;\dB$, $\textit{RL}_\mathrm{out} = 29.5 \;\dB$,
 $K = 1.50$, $G = 13.86 \;\dB$ and $F = 0.53 \;\dB$.
 
 \begin{figure}[!h]
-\centering
-%\begin{center}
-\begin{tabular}{cc}
-\begin{tikzpicture}[baseline,trim axis left]
-\begin{axis}[
-/pgf/number format/.cd,
-1000 sep={},
-ylabel=$S_{ii} \, \mathrm{[dB]}$,
-xlabel=Frequency f $\mathrm{[GHz]}$,
-width=3in,
-height=1.86in,
-ymin=-35,
-ymax=5,
-xmax=3.5,
-xmin=1.5,
-ytick={-35,-30,...,5},
-grid=both,
-%legend cell align=left,
-%legend style={
-%at={(0.01,0.02)},
-%anchor=south west}
-legend pos=south west
-]
-\addplot+[mark=none, color=red, solid] table[x=freq,y=S11] {data/Simulations/Simulation_results_all.txt};
-\addlegendentry{$S_{11}$}
-\addplot+[mark=none, color=blue, solid] table[x=freq,y=S22] {data/Simulations/Simulation_results_all.txt};
-\addlegendentry{$S_{22}$}
+	\centering
+	%\begin{center}
+	\begin{tabular}{cc}
+	\begin{tikzpicture}[baseline,trim axis left]
+		\begin{axis}[
+		/pgf/number format/.cd,
+		1000 sep={},
+		ylabel=$S_{ii} \, \mathrm{[dB]}$,
+		xlabel=Frequency f $\mathrm{[GHz]}$,
+		width=3in,
+		height=1.86in,
+		ymin=-35,
+		ymax=5,
+		xmax=3.5,
+		xmin=1.5,
+		ytick={-35,-30,...,5},
+		grid=both,
+		%legend cell align=left,
+		%legend style={
+		%at={(0.01,0.02)},
+		%anchor=south west}
+		legend pos=south west
+		]
+		\addplot+[mark=none, color=red, solid] table[x=freq,y=S11] {data/Simulations/Simulation_results_all.txt};
+		\addlegendentry{$S_{11}$}
+		\addplot+[mark=none, color=blue, solid] table[x=freq,y=S22] {data/Simulations/Simulation_results_all.txt};
+		\addlegendentry{$S_{22}$}
 
-\end{axis}
-\end{tikzpicture}
+		\end{axis}
+	\end{tikzpicture}
 
-&
+	&
 
-\hspace{25pt}
-\begin{tikzpicture}[baseline,trim axis left]
-\begin{axis}[
-/pgf/number format/.cd,
-1000 sep={},
-ylabel=Stability factor $\mu$,
-xlabel=Frequency f $\mathrm{[GHz]}$,
-width=3in,
-height=1.86in,
-ymin=0,
-ymax=2.5,
-xmax=3.5,
-xmin=1.5,
-ytick={0,0.5,...,2.5},
-grid=both,
-%legend cell align=left,
-%legend style={
-%at={(0.01,0.02)},
-%anchor=south west}
-%legend pos=south east
-]
-\addplot+[mark=none, color=red, solid] table[x=freq,y=Stability] {data/Simulations/Simulation_results_all.txt};
+	\hspace{25pt}
+	\begin{tikzpicture}[baseline,trim axis left]
+		\begin{axis}[
+		/pgf/number format/.cd,
+		1000 sep={},
+		ylabel=Stability factor $\mu$,
+		xlabel=Frequency f $\mathrm{[GHz]}$,
+		width=3in,
+		height=1.86in,
+		ymin=0,
+		ymax=2.5,
+		xmax=3.5,
+		xmin=1.5,
+		ytick={0,0.5,...,2.5},
+		grid=both,
+		%legend cell align=left,
+		%legend style={
+		%at={(0.01,0.02)},
+		%anchor=south west}
+		%legend pos=south east
+		]
+		\addplot+[mark=none, color=red, solid] table[x=freq,y=Stability] {data/Simulations/Simulation_results_all.txt};
 
-\end{axis}
-\end{tikzpicture}
-\\
-%
-\begin{tikzpicture}[baseline,trim axis left]
-\begin{axis}[
-/pgf/number format/.cd,
-1000 sep={},
-ylabel=Gain $G$ $\mathrm{[dB]}$,
-xlabel=Frequency f $\mathrm{[GHz]}$,
-width=3in,
-height=1.86in,
-ymin=0,
-ymax=15,
-xmax=3.5,
-xmin=1.5,
-ytick={0,3,...,15},
-grid=both,
-%legend cell align=left,
-%legend style={
-%at={(0.01,0.02)},
-%anchor=south west}
-%legend pos=south east
-]
-\addplot+[mark=none, color=red, solid] table[x=freq,y=Gain] {data/Simulations/Simulation_results_all.txt};
+		\end{axis}
+	\end{tikzpicture}
+	\\
+	%
+	\begin{tikzpicture}[baseline,trim axis left]
+		\begin{axis}[
+		/pgf/number format/.cd,
+		1000 sep={},
+		ylabel=Gain $G$ $\mathrm{[dB]}$,
+		xlabel=Frequency f $\mathrm{[GHz]}$,
+		width=3in,
+		height=1.86in,
+		ymin=0,
+		ymax=15,
+		xmax=3.5,
+		xmin=1.5,
+		ytick={0,3,...,15},
+		grid=both,
+		%legend cell align=left,
+		%legend style={
+		%at={(0.01,0.02)},
+		%anchor=south west}
+		%legend pos=south east
+		]
+		\addplot+[mark=none, color=red, solid] table[x=freq,y=Gain] {data/Simulations/Simulation_results_all.txt};
 
-\end{axis}
-\end{tikzpicture}
+		\end{axis}
+	\end{tikzpicture}
 
-&
+	&
 
-\hspace{25pt}
-\begin{tikzpicture}[baseline,trim axis left]
-\begin{axis}[
-/pgf/number format/.cd,
-1000 sep={},
-ylabel=Noise figure $F$ $\mathrm{[dB]}$,
-xlabel=Frequency f $\mathrm{[GHz]}$,
-width=3in,
-height=1.86in,
-ymin=0,
-ymax=6,
-xmax=3.5,
-xmin=1.5,
-ytick={0,1,...,6},
-grid=both,
-%legend cell align=left,
-%legend style={
-%at={(0.01,0.02)},
-%anchor=south west}
-%legend pos=south east
-]
-\addplot+[mark=none, color=red, solid] table[x=freq,y=Noise] {data/Simulations/Simulation_results_all.txt};
+	\hspace{25pt}
+	\begin{tikzpicture}[baseline,trim axis left]
+		\begin{axis}[
+		/pgf/number format/.cd,
+		1000 sep={},
+		ylabel=Noise figure $F$ $\mathrm{[dB]}$,
+		xlabel=Frequency f $\mathrm{[GHz]}$,
+		width=3in,
+		height=1.86in,
+		ymin=0,
+		ymax=6,
+		xmax=3.5,
+		xmin=1.5,
+		ytick={0,1,...,6},
+		grid=both,
+		%legend cell align=left,
+		%legend style={
+		%at={(0.01,0.02)},
+		%anchor=south west}
+		%legend pos=south east
+		]
+		\addplot+[mark=none, color=red, solid] table[x=freq,y=Noise] {data/Simulations/Simulation_results_all.txt};
 
-\end{axis}
-\end{tikzpicture}
-\\
-\end{tabular}
-\caption{Simulation results for input and output return losses, stability factor, gain and noise.}
-\label{f:sim}
+		\end{axis}
+	\end{tikzpicture}
+	\\
+	\end{tabular}
+	\caption{Simulation results for input and output return losses, stability factor, gain and noise.}
+	\label{f:sim}
 \end{figure}
 
 Fig. \ref{f:hb} illustrates the 1 dB gain compression and third order intercept 
@@ -487,104 +485,104 @@ are also plotted in addition to the desired signal frequency. The 1-dB gain comp
 at input power levels of $-1.3$~dB and 6.7~dB, respectively. 
 
 \begin{figure}[!h]
-\centering
-%\begin{tabular}{cc}
-\begin{tikzpicture}%[baseline, trim axis left]
-\begin{axis}[
-/pgf/number format/.cd,
-1000 sep={},
-ylabel=Gain G $\mathrm{[dB]}$,
-xlabel=$P_\mathrm{in} \; \mathrm{[dBm]}$,
-width=6in,
-height=4in,
-ymin=0,
-ymax=15,
-xmax=15,
-xmin=-30,
-ytick={0,3,...,15},
-grid=both,
-%legend cell align=left,
-%legend style={
-%at={(0.01,0.02)},
-%anchor=south west}
-%legend pos=south east
-]
-\addplot+[mark=none, color=red, solid] table[x=P_in,y=Gain] {data/Simulations/Simulation_HB_results_all.txt};
+	\centering
+	%\begin{tabular}{cc}
+	\begin{tikzpicture}%[baseline, trim axis left]
+		\begin{axis}[
+		/pgf/number format/.cd,
+		1000 sep={},
+		ylabel=Gain G $\mathrm{[dB]}$,
+		xlabel=$P_\mathrm{in} \; \mathrm{[dBm]}$,
+		width=6in,
+		height=4in,
+		ymin=0,
+		ymax=15,
+		xmax=15,
+		xmin=-30,
+		ytick={0,3,...,15},
+		grid=both,
+		%legend cell align=left,
+		%legend style={
+		%at={(0.01,0.02)},
+		%anchor=south west}
+		%legend pos=south east
+		]
+		\addplot+[mark=none, color=red, solid] table[x=P_in,y=Gain] {data/Simulations/Simulation_HB_results_all.txt};
 
-\addplot [black, mark=*, mark options={draw=black}]
-coordinates {
-(-1.3,12.8589) 
-};
+		\addplot [black, mark=*, mark options={draw=black}]
+		coordinates {
+		(-1.3,12.8589) 
+		};
 
-\node at (axis cs:-1.3,12.8589) [anchor=south west] {1-dB compression};
+		\node at (axis cs:-1.3,12.8589) [anchor=south west] {1-dB compression};
 
-\end{axis}
-\end{tikzpicture}
-%&
-\begin{tikzpicture}[baseline]
-\begin{axis}[
-/pgf/number format/.cd,
-1000 sep={},
-ylabel=$V_\mathrm{out} \; \mathrm{[dBm]}$,
-xlabel=$P_\mathrm{in} \; \mathrm{[dBm]}$,
-width=6in,
-height=4in,
-ymin=-85,
-ymax=35,
-xmax=15,
-xmin=-30,
-ytick={-85,-65,...,35},
-grid=both,
-legend cell align=left,
-%legend style={
-%at={(0,1.02)},
-%anchor=south west}
-legend pos=south east
-]
-\addplot+[mark=none, color=red, solid] table[x=P_in,y=V_out] {data/Simulations/Simulation_HB_results_all.txt};
-\addlegendentry{Fundamental}
-\addplot+[mark=none, color=green, dashed] table[x=P_in,y=V_out_2H] {data/Simulations/Simulation_HB_results_all.txt};
-\addlegendentry{$\mathit{IM}_2$}
-\addplot+[mark=none, color=blue, densely dashed] table[x=P_in,y=V_out_3H] {data/Simulations/Simulation_HB_results_all.txt};
-\addlegendentry{$\mathit{IM}_3$}
+		\end{axis}
+	\end{tikzpicture}
+	%&
+	\begin{tikzpicture}[baseline]
+		\begin{axis}[
+		/pgf/number format/.cd,
+		1000 sep={},
+		ylabel=$V_\mathrm{out} \; \mathrm{[dBm]}$,
+		xlabel=$P_\mathrm{in} \; \mathrm{[dBm]}$,
+		width=6in,
+		height=4in,
+		ymin=-85,
+		ymax=35,
+		xmax=15,
+		xmin=-30,
+		ytick={-85,-65,...,35},
+		grid=both,
+		legend cell align=left,
+		%legend style={
+		%at={(0,1.02)},
+		%anchor=south west}
+		legend pos=south east
+		]
+		\addplot+[mark=none, color=red, solid] table[x=P_in,y=V_out] {data/Simulations/Simulation_HB_results_all.txt};
+		\addlegendentry{Fundamental}
+		\addplot+[mark=none, color=green, dashed] table[x=P_in,y=V_out_2H] {data/Simulations/Simulation_HB_results_all.txt};
+		\addlegendentry{$\mathit{IM}_2$}
+		\addplot+[mark=none, color=blue, densely dashed] table[x=P_in,y=V_out_3H] {data/Simulations/Simulation_HB_results_all.txt};
+		\addlegendentry{$\mathit{IM}_3$}
 
-\addplot+[mark=none, color=red, densely dotted] table[
-x=P_in,
-y={create col/linear regression={y=V_out, 
-%variance list is used to weight the selection of points. Dummy solution. Not good.
-variance list={1,1,1,1,1,1,1,1,1,1,
-1,1,1,1,1,1,1,1,1,1,
-1,1,1,1,1,1000,
-1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,
-1000,1000,1000,1000,1000,1000,1000,1000,1000,1000}
-}}]
-{data/Simulations/Simulation_HB_results_all.txt};
+		\addplot+[mark=none, color=red, densely dotted] table[
+		x=P_in,
+		y={create col/linear regression={y=V_out, 
+		%variance list is used to weight the selection of points. Dummy solution. Not good.
+		variance list={1,1,1,1,1,1,1,1,1,1,
+		1,1,1,1,1,1,1,1,1,1,
+		1,1,1,1,1,1000,
+		1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,
+		1000,1000,1000,1000,1000,1000,1000,1000,1000,1000}
+		}}]
+		{data/Simulations/Simulation_HB_results_all.txt};
 
-\addplot+[mark=none, color=blue, densely dotted] table[
-x=P_in,
-y={create col/linear regression={y=V_out_3H,
-%variance list is used to weight the selection of points. Dummy solution. Not good. 
-variance list={1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,
-1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,
-1000,1000,1000,1000,1000,1,1,1,1,1,1,1000,1000,1000,1000,1000,
-1000,1000,1000,1000,1000,1000,1000,1000,1000,1000}
-}}]
-{data/Simulations/Simulation_HB_results_all.txt};
+		\addplot+[mark=none, color=blue, densely dotted] table[
+		x=P_in,
+		y={create col/linear regression={y=V_out_3H,
+		%variance list is used to weight the selection of points. Dummy solution. Not good. 
+		variance list={1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,
+		1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,
+		1000,1000,1000,1000,1000,1,1,1,1,1,1,1000,1000,1000,1000,1000,
+		1000,1000,1000,1000,1000,1000,1000,1000,1000,1000}
+		}}]
+		{data/Simulations/Simulation_HB_results_all.txt};
 
-\addplot [black, mark=*, mark options={draw=black}]
-coordinates {
-(6.7,20.5) 
-};
+		\addplot [black, mark=*, mark options={draw=black}]
+		coordinates {
+		(6.7,20.5) 
+		};
 
-\node at (axis cs:6.7,20.5) [anchor=south east] {TOI};
+		\node at (axis cs:6.7,20.5) [anchor=south east] {TOI};
 
-\end{axis}
-\end{tikzpicture}
-%\\
-%\end{tabular}
+		\end{axis}
+	\end{tikzpicture}
+	%\\
+	%\end{tabular}
 
-\caption{Simulation results for gain saturation and TOI.}
-\label{f:hb}
+	\caption{Simulation results for gain saturation and TOI.}
+	\label{f:hb}
 \end{figure}
 
 \newpage
