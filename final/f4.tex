@@ -139,7 +139,7 @@
 		\textbf{Group 1:} 				& \\
 		Tuomas Leinonen 				& 84695P \\
 		Gaurav Khairkar					& 12345A \\
-		Lasse Toivanen					& 12345A
+		Lasse Toivanen					& 82209T
 	\end{tabular}
 }
 
@@ -459,11 +459,9 @@ resistor value of 50~$\Omega$.
 Fig. \ref{f:sim} presents the final simulation results for the input 
 and output return losses $RL$, stability factor $K$, gain $G$ and noise figure 
 $F$. The simulation results depict the amplifier to satisfy all of the set design 
-specifications. The final results at the design frequency of 2.5~GHz are: 
-$\textit{RL}_\mathrm{in} = 22.5 \;\dB$, $\textit{RL}_\mathrm{out} = 29.5 \;\dB$, 
-$K = 1.50$, $G = 13.86 \;\dB$ and $F = 0.53 \;\dB$.
+specifications. The final simulation results at the design frequency at 2.5~GHz are summarized in Table \ref{t:sim results}.
 
-\begin{figure}[!h]
+\begin{figure}[h]
 	\centering
 	%\begin{center}
 	\begin{tabular}{cc}
@@ -581,6 +579,35 @@ $K = 1.50$, $G = 13.86 \;\dB$ and $F = 0.53 \;\dB$.
 	\caption{Simulation results for input and output return losses, stability factor, gain and noise.}
 	\label{f:sim}
 \end{figure}
+
+%Table summarizing results at 2.5 GHz
+
+%$\textit{RL}_\mathrm{in} = 22.5 \;\dB$, $\textit{RL}_\mathrm{out} = 29.5 \;\dB$, 
+%$K = 1.50$, $G = 13.86 \;\dB$ and $F = 0.53 \;\dB$.
+
+\begin{table}[h]
+%\renewcommand{\arraystretch}{1.3}
+\caption{Simulation results at 2.5 GHz}
+\label{t:sim results}
+\centering
+%more advanced table example
+%\begin{tabular}{|l|c|c|c|c|}
+%\hline
+%\multirow{2}{*}{\parbox[t]{0.6in}{\bfseries Theoretical\\Read Range} } & \multicolumn{2}{c|}{ \bfseries EPCglobal Standard} & \multicolumn{2}{c|}{ \bfseries Built System} \\ \cline{2-5}
+%& \bfseries 16 mm book & \bfseries 2 books & \bfseries 16 mm book & \bfseries 2 books \\ \hline \hline
+%\bfseries Forward [m] & \bfseries 7.9 & \bfseries 8.5 & 7.9 & 8.5 \\ \cline{2-3} \hline
+%\bfseries Reverse [m] & 10.9 & 9.8 & \bfseries 4.3 & \bfseries 3.9 \\ \cline{2-3} \hline
+%\end{tabular}
+\begin{tabular}{lc}
+Parameter & Value \\ \hline
+$RL_\mathrm{in} \; \mathrm{[dB]}$ & 22.5 \\ 
+$RL_\mathrm{out} \; \mathrm{[dB]}$ & 29.5 \\ 
+$K$ & 1.5 \\ 
+$G \; \mathrm{[dB]}$ & 13.86 \\ 
+$F \; \mathrm{[dB]}$ & 0.53 \\ 
+\end{tabular}
+\end{table} 
+
 
 Fig. \ref{f:hb} illustrates the 1 dB gain compression and third order intercept 
 (TOI) point for the amplifier. The second and third order intermodulation terms ($\textit{IM}_2$ and $\textit{IM}_3$) 
