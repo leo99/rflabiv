@@ -25,6 +25,7 @@
 \usepgfplotslibrary{units}
 \usepgfplotslibrary{smithchart}
 \pgfplotsset{compat=1.3,
+	every axis/.append style={thick},
 	tick label style={font=\small},
 	label style={font=\small},
 	legend style={font=\footnotesize}}
@@ -609,7 +610,7 @@ $F \; \mathrm{[dB]}$ & 0.53 \\
 \end{table} 
 
 
-Fig. \ref{f:hb} illustrates the 1 dB gain compression and third order intercept 
+Fig. \ref{f:hb_gain} and \ref{f:hb_toi} illustrate the 1-dB gain compression and third order intercept 
 (TOI) point for the amplifier. The second and third order intermodulation terms ($\textit{IM}_2$ and $\textit{IM}_3$) 
 are also plotted in addition to the desired signal frequency. The 1-dB gain compression and TOI occur 
 at input power levels of $-1.3$~dB and 6.7~dB, respectively. 
@@ -623,8 +624,8 @@ at input power levels of $-1.3$~dB and 6.7~dB, respectively.
 		1000 sep={},
 		ylabel=Gain G $\mathrm{[dB]}$,
 		xlabel=$P_\mathrm{in} \; \mathrm{[dBm]}$,
-		width=6in,
-		height=4in,
+		width=5in,
+		height=3.6in,
 		ymin=0,
 		ymax=15,
 		xmax=15,
@@ -648,15 +649,20 @@ at input power levels of $-1.3$~dB and 6.7~dB, respectively.
 
 		\end{axis}
 	\end{tikzpicture}
+	\caption{Simulation results for gain compression and the 1-dB compression point.}
+	\label{f:hb_gain}
+\end{figure}	
 	%&
-	\begin{tikzpicture}[baseline]
+\begin{figure}[!h]	
+	\centering
+	\begin{tikzpicture}%[baseline]
 		\begin{axis}[
 		/pgf/number format/.cd,
 		1000 sep={},
 		ylabel=$V_\mathrm{out} \; \mathrm{[dBm]}$,
 		xlabel=$P_\mathrm{in} \; \mathrm{[dBm]}$,
-		width=6in,
-		height=4in,
+		width=5in,
+		height=3.6in,
 		ymin=-85,
 		ymax=35,
 		xmax=15,
@@ -711,14 +717,100 @@ at input power levels of $-1.3$~dB and 6.7~dB, respectively.
 	%\\
 	%\end{tabular}
 
-	\caption{Simulation results for gain saturation and TOI.}
-	\label{f:hb}
+	\caption{Simulation results for intermodulation terms and TOI.}
+	\label{f:hb_toi}
+\end{figure}
+
+Fig. \ref{f:proto} presents the final manufactured amplifier with the surface mounted components and connectors soldered in place. 
+
+\begin{figure}[!h]
+	\begin{center}
+	%\centering
+	\includegraphics[width=4in]{img/proto}
+	%\setlength{\unitlength}{1mm}
+	\caption{The final manufactured proto amplifier.}
+	\label{f:proto}
+	\end{center}
 \end{figure}
 
 \newpage
 \section{Measurements}
 
-Text
+The measurements began by determining the S-parameters of the amplifier. A VNA was used for this purpose which was first calibrated with a SOLT calibration kit. The amplifier was biased using two power sources. First, the simulated voltage gate of approximately -0.39 V was applied to the gate and then the drain voltage was increased slowly. It was soon realized that the previously simulated and calculated biasing point could not be reached. To reach the required $I_\mathrm{DS}=30 \; \mathrm{mA}$ the $V_\mathrm{DS}$ had to be increased to 4.2 V. This difference could partly result from the inaccurate adjustability of the power sources. After biasing the amplifier the s-parameters were measured. The measured S-parameters are presented in Fig. \ref{m:S-parameters}. The S-parameter results depict a shift of the amplifier center frequency to lower frequencies.  
+
+\begin{figure}[!h]
+	\begin{center}
+	%\centering
+	\includegraphics[width=5in]{data/Measurements/sparam.pdf}
+	%\setlength{\unitlength}{1mm}
+	\caption{The measured S-paramaters $S_{11}$, $S_{22}$ and $S_{21}$.}
+	\label{m:S-parameters}
+	\end{center}
+\end{figure}
+
+The gain performance is mostly set by the biasing point and is still quite acceptable at the original design frequency. On the contrary, the input and output matching are clearly shifted to lower frequencies, namely to 2 GHz. The input and output reflection coefficients can be inspected on the Smith chart to get a hint of this frequency shifting. The input and output reflection coefficients are plotted in Fig. \ref{m:Smith_chart} at frequencies 1.5 GHz to 3.5 GHz. The information on the Smith chart does not propose any reasonable method for improving the input matching. In contrast, the output matching seems to be rotated by a possibly unaccounted additional parallel capacitance. Series inductance would rotate the matching similarly. The output matching could possibly be improved by disabling some of the via-grounds which would increase the parallel inductance thus rotating the matching point towards the center of the Smith chart. The measurements presented later on are conducted at 2 GHz as the built amplifier's performance would be really poor on the desired 2.5 GHz.
+
+%SMITHIN KARTTA-----------------------------------------------------------
+
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}
+\begin{smithchart}[
+%legend cell align=left,
+%legend style={
+%at={(0.3,0.8)},
+%anchor=south east}
+legend pos=north west
+]
+%\addplot coordinates {(0.5,0.2) (1,0.8) (2,2)};
+\addplot[red, solid,is smithchart cs]
+file {Data/Measurements/Smith_S11.txt};
+\addlegendentry{$S_{11}$}
+\addplot[blue, solid,is smithchart cs]
+file {Data/Measurements/Smith_S22.txt};
+\addlegendentry{$S_{22}$}
+%\addplot[blue, densely dotted,is smithchart cs]
+%file {Data/SmithData_er185.txt};
+%\addlegendentry{$\epsilon_\mathrm{r}=1.85$}
+%\addplot[brown, densely dashed,is smithchart cs]
+%file {Data/SmithData_er285.txt};
+%\addlegendentry{$\epsilon_\mathrm{r}=2.85$}
+\end{smithchart}
+\end{tikzpicture}
+\caption{Input and output reflection coefficients at frequencies 1.5 GHz to 3.5 GHz.
+%Effect of books relative permittivity to the resonance frequency and matching. Book thickness or the amount of paper and adjustment parameter \textit{dw} rotates the double resonance in a similar manner.
+\label{m:Smith_chart}}
+\end{figure}
+
+Fig. \ref{m:gain} presents the gain saturation and the 1-dB compression point of the amplifier at 2 GHz. The unsaturated gain is 14.1 dB and the 1-dB compression occurs at an input power of approximately -2.9 dB. 
+
+\begin{figure}[!h]
+	\begin{center}
+	%\centering
+	\includegraphics[width=5in]{data/Measurements/icp.pdf}
+	%\setlength{\unitlength}{1mm}
+	\caption{The measured gain saturation and 1-dB compression point.}
+	\label{m:gain}
+	\end{center}
+\end{figure}
+
+Intermodulation of the amplifier was inspected by applying two closely separated signal frequencies to the input of the amplifier and setting their power intensity to the same level. The signal frequencies were chosen as 1.999 GHz and 2.001 GHz. Thus the inspected third order intermodulation term would occur at 2.003 GHz. The intermodulation term was measured as the original signal frequency power levels were increased. The resulting plot is presented in Fig.~\ref{m:toi}. The TOI is approximately at an input power level of 3 dB.
+
+\begin{figure}[!h]
+	\begin{center}
+	%\centering
+	\includegraphics[width=5in]{data/Measurements/toi.pdf}
+	%\setlength{\unitlength}{1mm}
+	\caption{Result of the intermodulation measurement.}
+	\label{m:toi}
+	\end{center}
+\end{figure}
+
+An important occurrence was observed when conducting the intermodulation measurement originally. The spectrum analyzer displayed 10 MHz harmonics around the original signal frequencies. This indicated that the amplifier input either had some disturbing signal present or that the transistor was damaged. The situation was fixed by replacing the transistor and adding an additional 1 uF capacitor to the output biasing ground. Most likely the transistor was broken. Transistors are most likely broken by the excessive heat during soldering and de-soldering. Applying the biasing drain voltage before the gate voltage or exceeding the maximum allowed current of the transistor may also damage it (even burn it, as was noticed).
+
+Noise figure of the amplifier was measured by using the Y-factor method. In the Y-factor method a noise source is connected to the input of the amplifier. The noise source is used as a hot and cold source by applying a biasing voltage and the output power from the amplifier is measured. In this case the output noise power is too low and requires an additional pre-amplifier. Thus the Y-factor method has to be applied twice by first measuring the hot and cold source only with the pre-amplifier applied. When the DUT (built amplifier) is in conjunction with the pre-amplifier the DUT noise figure can be calculated from the cascaded system.
+
+
 
 \newpage
 \section{Results}
