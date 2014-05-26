@@ -246,7 +246,25 @@ Finally, in the last section, feedback and suggestions to improve this course ar
 \newpage
 \section{Theoretical background}
 
-Text
+In this section, the theoretical background of a transistor amplifier is explained in brief.
+
+\subsection{Working principle}
+First, the working of how a transistor amplifier works is explained. For a FET to operate
+as a linear amplifier, the transistor must be biased in the saturation region, and the instantaneous 
+drain current and drain-to-source voltage must also be confined to the saturation region.
+We use the transistor in the common source configuration of amplifier, which can be viewed as a voltage
+amplifier or transconductance amplifier.\\
+From our specification, we had to design the complete amplifier at 2V,30mA bias point. The transistor 
+amplifier gain is defined by this formula,$$g_{m} = 2\sqrt{K_n I_{DQ}}$$ where, \\ $g_{m}$ is transconductance or gain \\ $K_{n}$ depends on the width-to-length ratio. 
+More detailed study of transistor amplifiers can be found online, as this report mainly focused on 
+how the microwave amplifier is designed and its functioning.
+
+\subsection{Matching}
+The transistor amplifier mentioned above has different impedance compared to coaxial feeds, which are 
+usually used to feed and receive the output of the amplifier. Matching is required to avoid reflection 
+losses from both, the output and input of the transistor amplifier. This is done by using series and 
+shunt stubs as described in theory.  
+
 
 \newpage
 \section{Preliminary design}
